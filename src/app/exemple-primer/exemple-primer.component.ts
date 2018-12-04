@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import 'p5/lib/addons/p5.sound';
 import 'p5/lib/addons/p5.dom';
 import * as P5 from 'p5';
-
 @Component({
   selector: 'app-exemple-primer',
   templateUrl: './exemple-primer.component.html',
@@ -12,13 +11,10 @@ export class ExemplePrimerComponent implements OnInit {
   private oscillator: any;
   private env: any;
   private envelope: any;
-  private bgcolor: number[];
-  private voices: any[];
-  private voices2: any[];
+  private voices: {};
   private myKeyCodes: number[];
   private octave_3: number[];
   private octave_4: number[];
-  private sketch: any;
 
   constructor() {
     this.myKeyCodes = [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221,
@@ -34,8 +30,7 @@ export class ExemplePrimerComponent implements OnInit {
       155.56, 2 * 92.50, 2 * 110, 2 * 130.81, 2 * 155.56, 4 * 92.50, 4 * 110, 4 * 130.81,
       4 * 155.56, 82.41, 98, 116.54, 138.59, 2 * 82.41, 2 * 98, 2 * 116.54, 2 * 138.59,
       4 * 82.41, 4 * 98, 4 * 116.54, 4 * 138.59];
-    this.voices = []; // create an empty array for the 12 voices to be created
-    this.voices2 = []; // create an empty array for the 12 voices to be created
+    this.voices = {};
     this.oscillator = new P5.Oscillator();
     this.env = new P5.Envelope();
       // create an envelope to structure each note
@@ -46,14 +41,21 @@ export class ExemplePrimerComponent implements OnInit {
       susPercent : 0.3,
       releaseTime : 1.0
     };
-    this.sketch = {};
-    this.bgcolor = [255, 255, 255];
   }
   ngOnInit() {
-    console.log(this.octave_3);
-    console.log(this.octave_4);
-    console.log(this.voices, this.voices2);
+    console.log('arrays', this.myKeyCodes, this.octave_3, this.octave_4);
+    this.makeSoundsObject();
+    console.log('voiceeees', this.voices);
     this.fake();
+  }
+  private makeSoundsObject() {
+    this.voices = this.myKeyCodes.reduce((res, x, index) => {
+      res[x] = {
+        voices1: this.octave_3[index],
+        voices2: this.octave_4[index]
+      };
+      return res;
+    }, {});
   }
   private makeVoice(freq) {
     this.oscillator.setType('triangle');
@@ -65,11 +67,13 @@ export class ExemplePrimerComponent implements OnInit {
     this.oscillator.start();
     return this.oscillator;
   }
-  private createVoices() {
+  private createVoices(p5) {
     for (const key in this.myKeyCodes) {
       if (this.myKeyCodes) {
-        this.voices[key] = this.makeVoice(this.octave_3[key]);
-        this.voices2[key] = this.makeVoice(this.octave_4[key]);
+        const freq1: number = this.voices[this.myKeyCodes[key]].voices1;
+        const freq2: number = this.voices[this.myKeyCodes[key]].voices2;
+        this.makeVoice(freq1);
+        this.makeVoice(freq2);
       }
     }
   }
@@ -79,49 +83,36 @@ export class ExemplePrimerComponent implements OnInit {
   private releaseEnv(sound) {
     this.env.triggerRelease(sound);
   }
-  private keyPressed(p5: any) {
-    for (let i = 0; i < this.myKeyCodes.length; i++) {
-      if (p5.keyIsDown(this.myKeyCodes[i]) && p5.keyIsDown(32) === true) {
-        console.log('one oh these', this.voices);
-        this.releaseEnv(this.voices[i]);
-        this.playEnv(this.voices[i]);
-        // this.bgcolor = p5.map(i, 0, 12, 100, 250);
-      }
-      if (p5.keyIsDown(this.myKeyCodes[i]) && p5.keyIsDown(32) === false) {
-        this.releaseEnv(this.voices2[i]);
-        this.playEnv(this.voices2[i]);
-        // this.bgcolor = p5.map(i, 0, 12, 100, 250);
-      }
-    }
+  private keyPressed(freq) {
+          this.releaseEnv(freq);
+          this.playEnv(freq);
   }
-  private keyReleased(p5: any) {
-    for (let i = 0; i < this.myKeyCodes.length; i++) {
-      if (p5.keyCode === this.myKeyCodes[i]) {
-        this.releaseEnv(this.voices2[i]);
-        this.releaseEnv(this.voices[i]);
-      }
-      if (p5._events.keyCode === 32 && p5._events.keyIsDown(this.myKeyCodes[i])) {
-        this.releaseEnv(this.voices2[i]);
-        this.releaseEnv(this.voices[i]);
-      }
-    }
+  private keyReleased(freq) {
+        this.releaseEnv(freq);
+        this.releaseEnv(freq);
   }
   public fake() {
     return new P5((p5) => {
       p5.setup = () => {
-        this.createVoices();
+        console.log(p5.keyCode);
+        this.createVoices(p5);
         p5.createCanvas(800, 400);
         p5.textSize(18);
-        p5.text('Symmetric, press space to start', p5.width / 2, p5.height / 2);
       };
       p5.draw = () => {
-      //  this.bgcolor.forEach(color => {
-      //    p5.background(color, 0, 0);
-      // });
-        this.keyPressed(p5);
-        this.keyReleased(p5);
+        if (p5.keyIsPressed && p5.keyIsDown(32) === true ) {
+          console.log('keyyyyyyy', this.voices[p5.keyCode]);
+          const freq: number = this.voices[p5.keyCode].voices1;
+          this.keyPressed(freq);
+          this.keyReleased(freq);
+        }
+        if (p5.keyIsPressed && this.voices[p5.keyCode]) {
+          console.log('kevoisss', this.voices[p5.keyCode]);
+          const freq: number = this.voices[p5.keyCode].voices2;
+          this.keyPressed(freq);
+          this.keyReleased(freq);
+        }
       };
   });
 }
-
 }
