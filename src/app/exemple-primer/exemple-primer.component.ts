@@ -15,6 +15,9 @@ export class ExemplePrimerComponent implements OnInit {
   private myKeyCodes: number[];
   private octave_3: number[];
   private octave_4: number[];
+  private oscillators: any[];
+  private oscillators2: any[];
+  private osc: any[];
 
   constructor() {
     this.myKeyCodes = [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221,
@@ -41,11 +44,16 @@ export class ExemplePrimerComponent implements OnInit {
       susPercent : 0.3,
       releaseTime : 1.0
     };
+    this.oscillators = [];
+    this.oscillators2 = [];
+    this.osc = [];
   }
   ngOnInit() {
+
     console.log('arrays', this.myKeyCodes, this.octave_3, this.octave_4);
     this.makeSoundsObject();
-    console.log('voiceeees', this.voices);
+    this.createVoices();
+    console.log('oscillator', this.osc);
     this.fake();
   }
   private makeSoundsObject() {
@@ -63,22 +71,24 @@ export class ExemplePrimerComponent implements OnInit {
     this.env.setExp(true);
     this.env.setADSR(this.envelope.attackTime, this.envelope.decayTime, this.envelope.susPercent, this.envelope.releaseTime);
     this.env.setRange(this.envelope.attackLevel, this.envelope.releaseLevel);
+    this.env.setRange(this.envelope.attackLevel, this.envelope.releaseLevel);
     this.oscillator.amp(this.env);
     this.oscillator.start();
     return this.oscillator;
   }
-  private createVoices(p5) {
-    for (const key in this.myKeyCodes) {
-      if (this.myKeyCodes) {
-        const freq1: number = this.voices[this.myKeyCodes[key]].voices1;
-        const freq2: number = this.voices[this.myKeyCodes[key]].voices2;
-        this.makeVoice(freq1);
-        this.makeVoice(freq2);
+  private createVoices() {
+    for (const key of this.myKeyCodes) {
+        const freq1: number = this.voices[key].voices1;
+        console.log('freq1',this.makeVoice(this.voices[key].voices1));
+        this.osc.push(this.makeVoice(this.voices[key].voices1));
+        console.log('ha', key, this.voices[key]);
+        const freq2: number = this.voices[key].voices2;
+        this.oscillators.push(this.makeVoice(freq1));
+        this.oscillators2.push(this.makeVoice(freq2));
       }
-    }
   }
   private playEnv(sound) {
-    this.env.triggerAttack(sound);
+    this.env.triggerAttack(this.oscillators[sound]);
   }
   private releaseEnv(sound) {
     this.env.triggerRelease(sound);
@@ -94,23 +104,27 @@ export class ExemplePrimerComponent implements OnInit {
   public fake() {
     return new P5((p5) => {
       p5.setup = () => {
-        console.log(p5.keyCode);
-        this.createVoices(p5);
+        // this.createVoices(p5);
         p5.createCanvas(800, 400);
         p5.textSize(18);
       };
       p5.draw = () => {
         if (p5.keyIsPressed && p5.keyIsDown(32) === true ) {
+          console.log('keycode',p5.keyCode);
           console.log('keyyyyyyy', this.voices[p5.keyCode]);
-          const freq: number = this.voices[p5.keyCode].voices1;
-          this.keyPressed(freq);
-          this.keyReleased(freq);
+          if (this.voices[p5.keyCode]) {
+            const freq: number = this.voices[p5.keyCode].voices1;
+            this.keyPressed(freq);
+            this.keyReleased(freq);
+          }
         }
-        if (p5.keyIsPressed && this.voices[p5.keyCode]) {
-          console.log('kevoisss', this.voices[p5.keyCode]);
-          const freq: number = this.voices[p5.keyCode].voices2;
-          this.keyPressed(freq);
-          this.keyReleased(freq);
+        if (p5.keyIsPressed && p5.keyIsDown(32) === false) {
+          if (this.voices[p5.keyCode]) {
+            console.log('kevoisss',  this.voices);
+            const freq: number = this.voices[p5.keyCode].voices2;
+            this.keyPressed(freq);
+            this.keyReleased(freq);
+          }
         }
       };
   });
