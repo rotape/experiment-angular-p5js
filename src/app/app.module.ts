@@ -1,7 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes  } from "@angular/router";
+import { RouterModule, Routes  } from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
+import {MatButtonModule, MatCheckboxModule, MatCardModule, MatListModule, MatMenuModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { ExemplePrimerComponent } from './exemple-primer/exemple-primer.component';
@@ -20,7 +22,13 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true }
-    )
+    ),
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatCardModule,
+    MatListModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
