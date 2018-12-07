@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import 'p5/lib/addons/p5.sound';
 import 'p5/lib/addons/p5.dom';
 import * as P5 from 'p5';
+import { preserveWhitespacesDefault } from '@angular/compiler';
 @Component({
   selector: 'app-exemple-primer',
   templateUrl: './exemple-primer.component.html',
@@ -50,7 +51,7 @@ export class ExemplePrimerComponent implements OnInit {
   ngOnInit() {
     this.osc = this.makeVoice();
     this.makeSoundsObject();
-    this.fake();
+    this.initAcordion();
   }
   private makeSoundsObject() {
     this.voices = this.myKeyCodes.reduce((res, x, index) => {
@@ -85,14 +86,13 @@ export class ExemplePrimerComponent implements OnInit {
     this.osc.freq(note);
     this.osc.fade(0.5,0.2);
   }
-  public fake() {
+  public initAcordion() {
     return new P5((p5) => {
       p5.setup = () => {
         this.createOscillator();
-        p5.createCanvas(800, 400);
-        p5.textSize(18);
       };
       p5.draw = () => {
+        // playing sounds when a key is preserveWhitespacesDefault, space switch the voices
         if (p5.keyIsPressed && p5.keyIsDown(32) === true ) {
           if (this.voices[p5.keyCode]) {
             const freq: number = this.voices[p5.keyCode].voices1;
@@ -108,7 +108,50 @@ export class ExemplePrimerComponent implements OnInit {
             this.playNote(freq);
           }
         }
+        this.drawKeyboard(p5);
       };
   });
-}
+  }
+  private drawKeyboard(el){
+    el.createCanvas(800, 400);
+    // Set colors
+    el.fill(197, 197, 255, 255);
+    //stroke(127, 63, 120);
+    el.ellipse(100, 100, 40, 40);
+    el.ellipse(150, 100, 40, 40);
+    el.ellipse(200, 100, 40, 40);
+    el.ellipse(250, 100, 40, 40);
+    el.ellipse(300, 100, 40, 40);
+    el.ellipse(350, 100, 40, 40);
+    el.ellipse(400, 100, 40, 40);
+    el.ellipse(450, 100, 40, 40);
+    el.ellipse(500, 100, 40, 40);
+    el.ellipse(550, 100, 40, 40);
+    el.ellipse(600, 100, 40, 40);
+
+    el.ellipse(70, 150, 40, 40);
+    el.ellipse(120, 150, 40, 40);
+    el.ellipse(170, 150, 40, 40);
+    el.ellipse(220, 150, 40, 40);
+    el.ellipse(270, 150, 40, 40);
+    el.ellipse(320, 150, 40, 40);
+    el.ellipse(370, 150, 40, 40);
+    el.ellipse(420, 150, 40, 40);
+    el.ellipse(470, 150, 40, 40);
+    el.ellipse(520, 150, 40, 40);
+    el.ellipse(570, 150, 40, 40);
+    el.ellipse(620, 150, 40, 40);
+
+    el.ellipse(100, 200, 40, 40);
+    el.ellipse(150, 200, 40, 40);
+    el.ellipse(200, 200, 40, 40);
+    el.ellipse(250, 200, 40, 40);
+    el.ellipse(300, 200, 40, 40);
+    el.ellipse(350, 200, 40, 40);
+    el.ellipse(400, 200, 40, 40);
+    el.ellipse(450, 200, 40, 40);
+    el.ellipse(500, 200, 40, 40);
+    el.ellipse(550, 200, 40, 40);
+    el.ellipse(600, 200, 40, 40);
+  }
 }
