@@ -12,8 +12,8 @@ export class ExemplePrimerComponent implements OnInit {
   private oscillator: any;
   private env: any;
   private envelope: any;
-  private voices: {};
-  private myKeyCodes: number[];
+  public voices: {};
+  public myKeyCodes: number[];
   private octave_3: number[];
   private octave_4: number[];
   private oscillators: any[];
@@ -41,7 +41,7 @@ export class ExemplePrimerComponent implements OnInit {
     this.envelope = {
       attackLevel : .5,
       attackTime : 0.001,
-      decayTime : 0.2,
+      decayTime : 0.001,
       susPercent : 0.3,
       releaseTime : 1.0
     };
@@ -84,7 +84,7 @@ export class ExemplePrimerComponent implements OnInit {
   }
   private playNote(note){
     this.osc.freq(note);
-    this.osc.fade(0.5,0.2);
+    this.osc.fade(0.1,0.1);
   }
   public initAcordion() {
     return new P5((p5) => {
@@ -100,7 +100,7 @@ export class ExemplePrimerComponent implements OnInit {
           }
         }
         if (p5.keyIsPressed === false) {
-          this.osc.fade(0,0.5);
+          this.osc.fade(0,0.1);
         }
         if (p5.keyIsPressed  && p5.keyIsDown(32) === false) {
           if (this.voices[p5.keyCode]) {

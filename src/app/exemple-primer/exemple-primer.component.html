@@ -1,3 +1,8 @@
 <p>
     Symmetric, press space to start
 </p>
+<div class="acordion acordion__box">
+  <div class="acordion acordion__line acordion__line--moved"><div  *ngFor="let circle of myKeyCodes  | slice:0:11"  class="circle"></div></div><br>
+  <div class="acordion acordion__line"><div *ngFor="let circle of myKeyCodes  | slice:11:23" class="circle"></div></div><br>
+  <div class="acordion acordion__line acordion__line--moved"><div *ngFor="let circle of myKeyCodes  | slice:23:34" class="circle"></div></div><br>
+</div>

@@ -1,0 +1,25 @@
+
+.acordion {
+  display: flex;
+  &__box{
+    flex-direction: column;
+  }
+  &__line{
+    flex-direction: row;
+    &--moved{
+      padding-left: 1.5em;
+    }
+}
+
+
+}
+.circle {
+  background: #f00;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50%;
+  margin: 0 0.2em;
+  &--active{
+    background: yellow;
+  }
+}
