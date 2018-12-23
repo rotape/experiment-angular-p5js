@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import 'p5/lib/addons/p5.sound';
 import 'p5/lib/addons/p5.dom';
 import * as P5 from 'p5';
@@ -19,7 +19,14 @@ export class ExemplePrimerComponent implements OnInit {
   private oscillators: any[];
   private oscillators2: any[];
   private osc: any;
-
+  public keydown: any;
+  public musicalObject: any;
+  @HostListener('window:keydown', ['$event'])
+  keyboardInput(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.keydown = event.keycode;
+  }
   constructor() {
     this.myKeyCodes = [81, 87, 69, 82, 84, 89, 85, 73, 79, 80, 219, 221,
       65, 83, 68, 70, 71, 72, 74, 75, 76, 186, 192, 222, 90, 88, 67, 86, 66, 78,
@@ -35,6 +42,44 @@ export class ExemplePrimerComponent implements OnInit {
       4 * 155.56, 82.41, 98, 116.54, 138.59, 2 * 82.41, 2 * 98, 2 * 116.54, 2 * 138.59,
       4 * 82.41, 4 * 98, 4 * 116.54, 4 * 138.59];
     this.voices = {};
+    this.musicalObject = [
+      {key: 81, octave_3: 98, octave_4: 103.83},
+      {key: 87, octave_3: 116.54, octave_4: 123.47},
+      {key: 69, octave_3: 138.59, octave_4:  146.83},
+      {key: 82, octave_3: 164.81, octave_4: 174.61},
+      {key: 84, octave_3: 2 * 98, octave_4: 2 * 103.83},
+      {key: 89, octave_3: 2 * 116.54, octave_4: 2 * 123.47},
+      {key: 85, octave_3: 2 * 138.59, octave_4: 2 * 146.83},
+      {key: 73, octave_3: 2 * 164.81, octave_4: 2 * 174.61},
+      {key: 79, octave_3:  2 * 98, octave_4: 4 * 103.83},
+      {key: 80, octave_3: 4 * 116.54, octave_4: 4 * 123.47},
+      {key: 219, octave_3: 4 * 138.59, octave_4: 4 * 146.83},
+      {key: 221, octave_3: 4 * 164.81, octave_4: 4 * 174.61},
+      {key: 65, octave_3: 87.31, octave_4: 92.50},
+      {key: 83, octave_3: 103.83, octave_4: 110},
+      {key: 68, octave_3: 123.47, octave_4: 130.81},
+      {key: 70, octave_3: 146.83, octave_4: 155.56},
+      {key: 71, octave_3: 2 * 87.31, octave_4: 2 * 92.50},
+      {key: 72, octave_3: 2 * 103.83, octave_4: 2 * 110},
+      {key: 74, octave_3: 2 * 123.47, octave_4: 2 * 130.81},
+      {key: 75, octave_3: 2 * 146.83, octave_4: 2 * 155.56},
+      {key: 76, octave_3: 4 * 87.31, octave_4: 4 * 92.50},
+      {key: 186, octave_3: 4 * 103.83, octave_4: 4 * 110},
+      {key: 192, octave_3: 4 * 123.47, octave_4: 4 * 130.81},
+      {key: 222, octave_3: 4 * 146.83, octave_4: 4 * 155.56},
+      {key: 90, octave_3: 77.78, octave_4: 82.41},
+      {key: 88, octave_3: 92.5, octave_4: 98},
+      {key: 67, octave_3: 110, octave_4: 116.54},
+      {key: 86, octave_3: 130.81, octave_4:  138.59},
+      {key: 66, octave_3: 2 * 77.78, octave_4:  2 * 82.41},
+      {key: 78, octave_3: 2 * 92.5, octave_4: 2 * 98},
+      {key: 77, octave_3: 2 * 110, octave_4: 2 * 116.54},
+      {key: 188, octave_3: 2 * 130.81, octave_4: 2 * 138.59},
+      {key: 190, octave_3: 4 * 77.78, octave_4: 4 * 82.41},
+      {key: 191, octave_3: 4 * 92.5, octave_4: 4 * 98},
+      {key: 192, octave_3: 4 * 110, octave_4: 4 * 116.54},
+      {key: 193, octave_3: 4 * 130.81, octave_4: 4 * 138.59},
+    ];
     this.oscillator = new P5.Oscillator();
     this.env = new P5.Envelope();
       // create an envelope to structure each note
@@ -84,7 +129,7 @@ export class ExemplePrimerComponent implements OnInit {
   }
   private playNote(note){
     this.osc.freq(note);
-    this.osc.fade(0.1,0.1);
+    this.osc.fade(0.1, 0.1);
   }
   public initAcordion() {
     return new P5((p5) => {
@@ -100,7 +145,7 @@ export class ExemplePrimerComponent implements OnInit {
           }
         }
         if (p5.keyIsPressed === false) {
-          this.osc.fade(0,0.1);
+          this.osc.fade(0, 0.1);
         }
         if (p5.keyIsPressed  && p5.keyIsDown(32) === false) {
           if (this.voices[p5.keyCode]) {
@@ -108,50 +153,8 @@ export class ExemplePrimerComponent implements OnInit {
             this.playNote(freq);
           }
         }
-        this.drawKeyboard(p5);
       };
   });
   }
-  private drawKeyboard(el){
-    el.createCanvas(800, 400);
-    // Set colors
-    el.fill(197, 197, 255, 255);
-    //stroke(127, 63, 120);
-    el.ellipse(100, 100, 40, 40);
-    el.ellipse(150, 100, 40, 40);
-    el.ellipse(200, 100, 40, 40);
-    el.ellipse(250, 100, 40, 40);
-    el.ellipse(300, 100, 40, 40);
-    el.ellipse(350, 100, 40, 40);
-    el.ellipse(400, 100, 40, 40);
-    el.ellipse(450, 100, 40, 40);
-    el.ellipse(500, 100, 40, 40);
-    el.ellipse(550, 100, 40, 40);
-    el.ellipse(600, 100, 40, 40);
 
-    el.ellipse(70, 150, 40, 40);
-    el.ellipse(120, 150, 40, 40);
-    el.ellipse(170, 150, 40, 40);
-    el.ellipse(220, 150, 40, 40);
-    el.ellipse(270, 150, 40, 40);
-    el.ellipse(320, 150, 40, 40);
-    el.ellipse(370, 150, 40, 40);
-    el.ellipse(420, 150, 40, 40);
-    el.ellipse(470, 150, 40, 40);
-    el.ellipse(520, 150, 40, 40);
-    el.ellipse(570, 150, 40, 40);
-    el.ellipse(620, 150, 40, 40);
-
-    el.ellipse(100, 200, 40, 40);
-    el.ellipse(150, 200, 40, 40);
-    el.ellipse(200, 200, 40, 40);
-    el.ellipse(250, 200, 40, 40);
-    el.ellipse(300, 200, 40, 40);
-    el.ellipse(350, 200, 40, 40);
-    el.ellipse(400, 200, 40, 40);
-    el.ellipse(450, 200, 40, 40);
-    el.ellipse(500, 200, 40, 40);
-    el.ellipse(550, 200, 40, 40);
-    el.ellipse(600, 200, 40, 40);
-  }
 }
