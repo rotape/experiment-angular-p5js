@@ -19,5 +19,6 @@ export class FetchPipe implements PipeTransform {
     }
  
     return this.cachedData;
-
+  }
 }
+
