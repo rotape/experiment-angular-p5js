@@ -19,6 +19,7 @@ export class ExemplePrimerComponent implements OnInit {
   private oscillators: any[];
   private oscillators2: any[];
   private osc: any;
+  public isDown: boolean;
   public keydown: any;
   public musicalObject: any;
   @HostListener('window:keydown', ['$event'])
@@ -138,14 +139,21 @@ export class ExemplePrimerComponent implements OnInit {
       };
       p5.draw = () => {
         // playing sounds when a key is preserveWhitespacesDefault, space switch the voices
+        const id = p5.keyCode;
+        const buttonPressed = document.getElementById(id);
+        
         if (p5.keyIsPressed && p5.keyIsDown(32) === true ) {
           if (this.voices[p5.keyCode]) {
             const freq: number = this.voices[p5.keyCode].voices1;
             this.playNote(freq);
+            this.isDown = true;
+            console.log(this.isDown);
+            console.log('buttonPressed', buttonPressed);
           }
         }
         if (p5.keyIsPressed === false) {
           this.osc.fade(0, 0.1);
+          this.isDown = false;
         }
         if (p5.keyIsPressed  && p5.keyIsDown(32) === false) {
           if (this.voices[p5.keyCode]) {

@@ -8,6 +8,7 @@ import {MatButtonModule, MatCheckboxModule, MatCardModule, MatListModule, MatMen
 import { AppComponent } from './app.component';
 import { ExemplePrimerComponent } from './exemple-primer/exemple-primer.component';
 import 'p5';
+import { FetchPipe } from './pipes/fetch.pipe';
 const appRoutes: Routes = [
   {path: 'template1', component: ExemplePrimerComponent}
 ];
@@ -15,7 +16,8 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    ExemplePrimerComponent
+    ExemplePrimerComponent,
+    FetchPipe
   ],
   imports: [
     BrowserModule,
