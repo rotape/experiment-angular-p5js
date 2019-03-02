@@ -2,7 +2,7 @@
     Symmetric, press space to start
 </p>
 <div class="acordion acordion__box">
-  <div class="acordion acordion__line acordion__line--moved"><div  *ngFor="let circle of musicalObject  | slice:0:11" id="{{circle.key}}" [ngClass]="{'circle--active': isDown}" class="circle circle--{{circle.key}}">{{circle.key}}</div></div><br>
-  <div class="acordion acordion__line"><div *ngFor="let circle of musicalObject  | slice:11:23" class="circle">{{circle.key}}</div></div><br>
-  <div class="acordion acordion__line acordion__line--moved"><div *ngFor="let circle of musicalObject  | slice:23:34" class="circle">{{circle.key}}</div></div><br>
+  <div class="acordion acordion__line acordion__line--moved"><div  *ngFor="let circle of musicalObject  | slice:0:11" id="{{circle.key}}"  [style.background]="circle.key === isDown? 'yellow': 'red'" class="circle circle--{{circle.key}}">{{circle.key}}</div></div><br>
+  <div class="acordion acordion__line"><div *ngFor="let circle of musicalObject  | slice:11:23" class="circle" [style.background]="circle.key === isDown? 'yellow': 'red'">{{circle.key}}</div></div><br>
+  <div class="acordion acordion__line acordion__line--moved"><div *ngFor="let circle of musicalObject  | slice:23:34" class="circle" [style.background]="circle.key === isDown? 'yellow': 'red'">{{circle.key}}</div></div><br>
 </div>{{isDown}}
