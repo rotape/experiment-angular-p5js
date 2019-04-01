@@ -4,21 +4,33 @@ import { RouterModule, Routes  } from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-import {MatButtonModule, MatCheckboxModule, MatCardModule, MatListModule, MatMenuModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatCardModule,
+  MatListModule,
+  MatMenuModule,
+  MatInputModule,
+  MatSelectModule,
+  MatFormFieldModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { ExemplePrimerComponent } from './exemple-primer/exemple-primer.component';
 import 'p5';
 import { FetchPipe } from './pipes/fetch.pipe';
+import { ExempleSegonComponent } from './exemple-segon/exemple-segon.component';
 const appRoutes: Routes = [
-  {path: 'template1', component: ExemplePrimerComponent}
+  {path: 'template1', component: ExemplePrimerComponent},
+  {path: 'template2', component: ExempleSegonComponent}
+
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     ExemplePrimerComponent,
-    FetchPipe
+    FetchPipe,
+    ExempleSegonComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +44,11 @@ const appRoutes: Routes = [
     MatCheckboxModule,
     MatCardModule,
     MatListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]
