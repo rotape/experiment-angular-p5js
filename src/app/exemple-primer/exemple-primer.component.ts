@@ -147,12 +147,11 @@ export class ExemplePrimerComponent implements OnInit {
             const freq: number = this.voices[p5.keyCode].voices1;
             this.playNote(freq);
             this.isDown = p5.keyCode;
-            console.log(this.isDown);
-            console.log('buttonPressed', buttonPressed);
+
           }
         }
         if (p5.keyIsPressed === false) {
-          this.osc.fade(0, 0.1);
+          this.osc.fade(0, 0.01);
           this.isDown = false;
         }
         if (p5.keyIsPressed  && p5.keyIsDown(32) === false) {
