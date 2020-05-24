@@ -27,7 +27,6 @@ export class ExemplePrimerComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.keydown = event.keyCode;
-    console.log("KEYDOWN", event.keyCode);
   }
   constructor() {
     this.myKeyCodes = [

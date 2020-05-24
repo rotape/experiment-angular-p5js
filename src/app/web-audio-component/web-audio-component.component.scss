@@ -4,12 +4,14 @@
 
   .key {
     width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    margin: 0 0.2em;
     padding: 1em;
+    background-color: rgba($color: #a36758, $alpha: 1.0);
 
     &--active {
       background-color: rgba($color: #e2a24e, $alpha: 1.0);
     }
   }
-
-
 }

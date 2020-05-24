@@ -35,6 +35,37 @@ export class WebAudioComponentComponent implements OnInit {
     }
   }
   constructor() {}
+  ngOnInit() {
+    this.createAndConnectGainNode();
+    this.createAndInitializeOscillators();
+  }
+  createAndConnectGainNode() {
+    this.gainNode = this.audioContext.createGain();
+    this.gainNode.gain.value = (1 - 0.1) / 6;
+    this.gainNode.connect(this.audioContext.destination);
+  }
+  createAndInitializeOscillators() {
+    musicalObject.forEach((note) => {
+      const oscillator: any = this.audioContext.createOscillator();
+      oscillator.frequency.value = note.octave_3;
+      oscillator.openingSound = note.octave_3;
+      oscillator.closingSound = note.octave_4;
+      oscillator.key = note.key;
+      this.oscillatorsArray.push(oscillator);
+      oscillator.start();
+    });
+  }
+  playOrStopOscillator(oscillator) {
+    oscillator.isPlaying ? this.stop(oscillator) : this.play(oscillator);
+  }
+  play(oscillator) {
+    oscillator.connect(this.gainNode);
+    oscillator.isPlaying = true;
+  }
+  stop(oscillator) {
+    oscillator.disconnect(this.gainNode);
+    oscillator.isPlaying = false;
+  }
   changeOctaveClosingAcordion() {
     this.oscillatorsArray.forEach((oscillator) => {
       oscillator.frequency.value = oscillator.openingSound;
@@ -45,37 +76,6 @@ export class WebAudioComponentComponent implements OnInit {
     this.oscillatorsArray.forEach((oscillator) => {
       oscillator.frequency.value = oscillator.closingSound;
     });
-  }
-  ngOnInit() {
-    this.setup();
-  }
-  setup() {
-    this.createAndInitializeOscillators();
-    console.log(this.audioContext);
-  }
-  createAndInitializeOscillators() {
-    musicalObject.forEach((note) => {
-      this.gainNode = this.audioContext.createGain();
-      const oscillator: any = this.audioContext.createOscillator();
-      oscillator.frequency.value = note.octave_3;
-      oscillator.openingSound = note.octave_3;
-      oscillator.closingSound = note.octave_4;
-      oscillator.key = note.key;
-      this.oscillatorsArray.push(oscillator);
-      oscillator.start();
-    });
-  }
-  playOrStopOscillator(oscillator, $event) {
-    oscillator.isPlaying ? this.stop(oscillator) : this.play(oscillator);
-  }
-  play(oscillator) {
-    oscillator.connect(this.audioContext.destination);
-    oscillator.isPlaying = true;
-    console.log("OSCILLATRO", oscillator);
-  }
-  stop(oscillator) {
-    oscillator.disconnect(this.audioContext.destination);
-    oscillator.isPlaying = false;
   }
   findOscillator(key) {
     return this.oscillatorsArray.find((oscillator) => oscillator.key === key);
