@@ -1,20 +1,18 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {
-  MatInputModule,
-  MatSelectModule,
-  MatFormFieldModule,
-  MatOption
-} from '@angular/material';
-import 'p5/lib/addons/p5.sound';
-import 'p5/lib/addons/p5.dom';
-import * as P5 from 'p5';
-import {from} from 'rxjs';
-import {THIS_EXPR} from '@angular/compiler/src/output/output_ast';
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { MatOption } from "@angular/material/core";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import "p5/lib/addons/p5.sound";
+import "p5/lib/addons/p5.dom";
+import * as P5 from "p5";
+import { from } from "rxjs";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
-  selector: 'app-exemple-segon',
-  templateUrl: './exemple-segon.component.html',
-  styleUrls: ['./exemple-segon.component.scss']
+  selector: "app-exemple-segon",
+  templateUrl: "./exemple-segon.component.html",
+  styleUrls: ["./exemple-segon.component.scss"],
 })
 export class ExempleSegonComponent implements OnInit, OnDestroy {
   public centerX: number;
@@ -30,32 +28,26 @@ export class ExempleSegonComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.returnShape();
-
   }
 
   ngOnDestroy(): void {
-
-    const canvas = document.getElementsByClassName('p5Canvas');
-    console.log('canvasssss', canvas);
+    const canvas = document.getElementsByClassName("p5Canvas");
     //canvas.forEach((x) => x.remove());
   }
 
-
   convertToRadians(degrees) {
-    return degrees * Math.PI / 180;
+    return (degrees * Math.PI) / 180;
   }
 
   returnShape() {
-    return new P5(p5 => {
-
+    return new P5((p5) => {
       p5.setup = () => {
         p5.createCanvas(window.innerWidth, window.innerHeight);
       };
       p5.draw = () => {
         //this.circle(p5);
-        this.background(p5, 'pink');
+        this.background(p5, "pink");
         this.rectangle(p5);
       };
     });
@@ -70,15 +62,17 @@ export class ExempleSegonComponent implements OnInit, OnDestroy {
     sketch.square(sketch.mouseX, this.centerY, 55, 55);
   }
 
-  moveFigure() {
-
-  }
+  moveFigure() {}
 
   circle(sketch) {
     sketch.stroke(12);
     sketch.fill(0, 120);
 
-    sketch.ellipse(sketch.mouseX, sketch.mouseY, 180 + sketch.mouseX, 180 + sketch.mouseX);
-
+    sketch.ellipse(
+      sketch.mouseX,
+      sketch.mouseY,
+      180 + sketch.mouseX,
+      180 + sketch.mouseX
+    );
   }
 }

@@ -1,0 +1,15 @@
+#keyboard {
+  display: flex;
+  flex-direction: column;
+
+  .key {
+    width: 1.5em;
+    padding: 1em;
+
+    &--active {
+      background-color: rgba($color: #e2a24e, $alpha: 1.0);
+    }
+  }
+
+
+}

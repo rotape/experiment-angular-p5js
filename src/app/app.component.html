@@ -1,7 +1,26 @@
 <h2>Welcome! Here you can check some funny coding experiments</h2>
 <button mat-button [matMenuTriggerFor]="menu">Menu</button>
 <mat-menu #menu="matMenu">
-    <button mat-menu-item [routerLink]="['/template1']" routerLinkActive="router-link-active">Exemple Acordió P5.js</button>
-    <button mat-menu-item [routerLink]="['/template2']" routerLinkActive="router-link-active">Sinte senzill</button>
+  <button
+    mat-menu-item
+    [routerLink]="['/template1']"
+    routerLinkActive="router-link-active"
+  >
+    Exemple Acordió P5.js
+  </button>
+  <button
+    mat-menu-item
+    [routerLink]="['/template2']"
+    routerLinkActive="router-link-active"
+  >
+    Sinte senzill
+  </button>
+  <button
+    mat-menu-item
+    [routerLink]="['/audioComponent']"
+    routerLinkActive="router-link-active"
+  >
+    Un altre component d'audio
+  </button>
 </mat-menu>
 <router-outlet></router-outlet>
