@@ -1,6 +1,9 @@
 #keyboard {
+  padding: 3em 2.5em;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  max-width: 40em;
+  margin: auto;
 
   .key {
     width: 1.5em;
@@ -8,10 +11,15 @@
     border-radius: 50%;
     margin: 0 0.2em;
     padding: 1em;
+    flex-grow: 3;
     background-color: rgba($color: #a36758, $alpha: 1.0);
 
     &--active {
       background-color: rgba($color: #e2a24e, $alpha: 1.0);
+
+      &_shifted {
+        background-color: rgba($color: #ffa32b, $alpha: 1.0);
+      }
     }
   }
 }

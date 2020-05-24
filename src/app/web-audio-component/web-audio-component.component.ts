@@ -13,10 +13,11 @@ export class WebAudioComponentComponent implements OnInit {
   spaceIsPressed = false;
   gainNode: GainNode;
   @HostListener("window:keydown", ["$event"])
-  keyboardInput(event: any) {
+  keyDown(event: any) {
     event.preventDefault();
     event.stopPropagation();
     if (event.code === "Space") {
+      this.spaceIsPressed = true;
       this.changeOctaveClosingAcordion();
     } else {
       const oscillator = this.findOscillator(event.keyCode);
@@ -24,10 +25,11 @@ export class WebAudioComponentComponent implements OnInit {
     }
   }
   @HostListener("window:keyup", ["$event"])
-  keyboardUp(event: any) {
+  keydUp(event: any) {
     event.preventDefault();
     event.stopPropagation();
     if (event.code === "Space") {
+      this.spaceIsPressed = false;
       this.changeOctaveOpeningAcordion();
     } else {
       const oscillator = this.findOscillator(event.keyCode);
