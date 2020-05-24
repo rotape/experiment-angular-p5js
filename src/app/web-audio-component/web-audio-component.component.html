@@ -7,9 +7,10 @@
   <option value="sawtooth">Sawtooth</option>
 </select>
 <!-- Keyboard placeholder -->
-<div id="keyboard">
-  <div *ngFor="let oscillator of oscillatorsArray">
+<div class="acordion acordion__box">
+  <div class="acordion acordion__line acordion__line--moved">
     <div
+      *ngFor="let oscillator of oscillatorsArray | slice: 0:11"
       (click)="playOrStopOscillator(oscillator)"
       [ngClass]="{
         'key--active': oscillator.isPlaying,
@@ -20,6 +21,33 @@
       {{ oscillator.key }}
       {{ oscillator.frequency.value }}
     </div>
-    <p></p>
+  </div>
+  <div class="acordion acordion__line">
+    <div
+      *ngFor="let oscillator of oscillatorsArray | slice: 11:23"
+      (click)="playOrStopOscillator(oscillator)"
+      [ngClass]="{
+        'key--active': oscillator.isPlaying,
+        'key--active_shifted': spaceIsPressed && oscillator.isPlaying
+      }"
+      class="key"
+    >
+      {{ oscillator.key }}
+      {{ oscillator.frequency.value }}
+    </div>
+  </div>
+  <div class="acordion acordion__line acordion__line--moved">
+    <div
+      *ngFor="let oscillator of oscillatorsArray | slice: 23:34"
+      (click)="playOrStopOscillator(oscillator)"
+      [ngClass]="{
+        'key--active': oscillator.isPlaying,
+        'key--active_shifted': spaceIsPressed && oscillator.isPlaying
+      }"
+      class="key"
+    >
+      {{ oscillator.key }}
+      {{ oscillator.frequency.value }}
+    </div>
   </div>
 </div>
