@@ -1100,11 +1100,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.21.tgz#c00e9603399126925806bed2d9a1e37da506965e"
   integrity sha512-PQKsydPxYxF1DsAFWmunaxd3sOi3iMt6Zmx/tgaagHYmwJ/9cRH91hQkeJZaUGWbvn0K5HlSVEXkn5U/llWPpQ==
 
-"@types/p5@^0.7.2":
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/@types/p5/-/p5-0.7.3.tgz#19a666820b17b5dbf2c78331d13e617fe5f30631"
-  integrity sha512-VXkm/JpR5bNKHVW5wkg0thyjoMjGU7CtGKvPaoQts/nXwEmJC7vnLozkJrYDUKZr0ILGhE1ZqZJ8/nxXbk6dlw==
-
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
@@ -6298,11 +6293,6 @@ p-try@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
-
-p5@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/p5/-/p5-0.7.3.tgz#a0660327feb8da3e43359a16ad62566b96a7cabe"
-  integrity sha512-Ap0Op/YlbqlBe9BEkpislygOKcID9+i6lbGHcUY/QkgZl21+Jy0GPpw+bLjgURk/wlloLcXGnUDpuGsP0xsx2Q==
 
 pacote@9.5.12:
   version "9.5.12"
