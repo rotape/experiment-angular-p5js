@@ -20,7 +20,8 @@
       }"
       class="key"
     >
-      {{ oscillator.key }}
+      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
       {{ oscillator.frequency.value }}
     </div>
   </div>
@@ -34,7 +35,8 @@
       }"
       class="key"
     >
-      {{ oscillator.key }}
+      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
       {{ oscillator.frequency.value }}
     </div>
   </div>
@@ -48,7 +50,8 @@
       }"
       class="key"
     >
-      {{ oscillator.key }}
+      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
       {{ oscillator.frequency.value }}
     </div>
   </div>

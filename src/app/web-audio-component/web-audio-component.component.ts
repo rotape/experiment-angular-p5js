@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from "@angular/core";
-import { musicalObject } from "../common/models/sounds";
+import { musicalObjectCorrected } from "../common/models/sounds";
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
@@ -47,15 +47,18 @@ export class WebAudioComponentComponent implements OnInit {
     this.gainNode.connect(this.audioContext.destination);
   }
   createAndInitializeOscillators() {
-    musicalObject.forEach((note) => {
+    musicalObjectCorrected.forEach((note) => {
       const oscillator: any = this.audioContext.createOscillator();
-      oscillator.frequency.value = note.octave_3;
-      oscillator.openingSound = note.octave_3;
-      oscillator.closingSound = note.octave_4;
-      oscillator.key = note.key;
+      oscillator.frequency.value = note.closingFreq;
+      oscillator.openingSound = note.closingFreq;
+      oscillator.closingSound = note.openingFreq;
+      oscillator.key = note.keyCode;
+      oscillator.openingNote = note.openingNote;
+      oscillator.closingNote = note.closingNote;
       this.oscillatorsArray.push(oscillator);
       oscillator.start();
     });
+    console.log(this.oscillatorsArray);
   }
   playOrStopOscillator(oscillator) {
     oscillator.isPlaying ? this.stop(oscillator) : this.play(oscillator);
