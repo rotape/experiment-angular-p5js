@@ -1,58 +1,63 @@
-<!-- Waveform selector -->
-<h1>This emaulates a diatonical accordion behavior</h1>
-<p>Press space to change the movement direction</p>
-<!-- <label for="soundType">Select a waveform:</label>
-<select name="soundType" id="soundType">
-  <option value="triangle" selected>Triangle</option>
-  <option value="sine">Sine</option>
-  <option value="square">Square</option>
-  <option value="sawtooth">Sawtooth</option>
-</select> -->
-<!-- Keyboard placeholder -->
-<div class="acordion acordion__box">
-  <div class="acordion acordion__line acordion__line--moved">
-    <div
-      *ngFor="let oscillator of oscillatorsArray | slice: 0:11"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
-        'key--active_shifted': spaceIsPressed && oscillator.isPlaying
-      }"
-      class="key"
-    >
-      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-      {{ oscillator.frequency.value }}
+<div class="wrp">
+  <!-- Waveform selector -->
+  <h1>Diatonical accordion</h1>
+  <p>Press space to change the movement direction</p>
+  <!-- <label for="soundType">Select a waveform:</label>
+  <select name="soundType" id="soundType">
+    <option value="triangle" selected>Triangle</option>
+    <option value="sine">Sine</option>
+    <option value="square">Square</option>
+    <option value="sawtooth">Sawtooth</option>
+  </select> -->
+  <!-- Keyboard placeholder -->
+  <div class="acordion acordion__box">
+    <div class="acordion acordion__line acordion__line--moved">
+      <div
+        *ngFor="let oscillator of oscillatorsArray | slice: 0:11"
+        (click)="playOrStopOscillator(oscillator)"
+        [ngClass]="{
+          'key--active': oscillator.isPlaying,
+          'key--shifted': spaceIsPressed
+        }"
+        class="key"
+      >
+        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
+        {{ oscillator.frequency.value }}
+      </div>
+    </div>
+    <div class="acordion acordion__line">
+      <div
+        *ngFor="let oscillator of oscillatorsArray | slice: 11:23"
+        (click)="playOrStopOscillator(oscillator)"
+        [ngClass]="{
+          'key--active': oscillator.isPlaying,
+          'key--shifted': spaceIsPressed
+        }"
+        class="key"
+      >
+        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
+        {{ oscillator.frequency.value }}
+      </div>
+    </div>
+    <div class="acordion acordion__line acordion__line--moved">
+      <div
+        *ngFor="let oscillator of oscillatorsArray | slice: 23:34"
+        (click)="playOrStopOscillator(oscillator)"
+        [ngClass]="{
+          'key--active': oscillator.isPlaying,
+          'key--shifted': spaceIsPressed
+        }"
+        class="key"
+      >
+        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
+        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
+        {{ oscillator.frequency.value }}
+      </div>
     </div>
   </div>
-  <div class="acordion acordion__line">
-    <div
-      *ngFor="let oscillator of oscillatorsArray | slice: 11:23"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
-        'key--active_shifted': spaceIsPressed && oscillator.isPlaying
-      }"
-      class="key"
-    >
-      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-      {{ oscillator.frequency.value }}
-    </div>
-  </div>
-  <div class="acordion acordion__line acordion__line--moved">
-    <div
-      *ngFor="let oscillator of oscillatorsArray | slice: 23:34"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
-        'key--active_shifted': spaceIsPressed && oscillator.isPlaying
-      }"
-      class="key"
-    >
-      <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-      <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-      {{ oscillator.frequency.value }}
-    </div>
-  </div>
+  <mat-slide-toggle [(ngModel)]="isChecked" (change)="switchOctaves($event)"
+    >Switch Octave</mat-slide-toggle
+  >
 </div>

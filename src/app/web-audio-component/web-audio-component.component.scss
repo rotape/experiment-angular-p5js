@@ -1,5 +1,6 @@
 .acordion {
   display: flex;
+  align-items: center;
 
   &__box {
     flex-direction: column;
@@ -9,7 +10,7 @@
     flex-direction: row;
 
     &--moved {
-      padding-left: 1.5em;
+      padding-left: 0.2em;
     }
 
     .key {
@@ -20,12 +21,13 @@
       padding: 1em;
       background-color: rgba($color: #a36758, $alpha: 1.0);
 
+      &--shifted {
+        background-color: rgba($color: #849b5f, $alpha: 1.0);
+      }
+
       &--active {
         background-color: rgba($color: #e2a24e, $alpha: 1.0);
 
-        &_shifted {
-          background-color: rgba($color: #ffa32b, $alpha: 1.0);
-        }
       }
     }
   }

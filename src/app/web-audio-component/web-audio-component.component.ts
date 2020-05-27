@@ -12,6 +12,7 @@ export class WebAudioComponentComponent implements OnInit {
   closing: boolean;
   spaceIsPressed = false;
   gainNode: GainNode;
+  isChecked = false;
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
     event.preventDefault();
@@ -21,7 +22,9 @@ export class WebAudioComponentComponent implements OnInit {
       this.changeOctaveClosingAcordion();
     } else {
       const oscillator = this.findOscillator(event.keyCode);
-      this.play(oscillator);
+      if (oscillator) {
+        this.play(oscillator);
+      }
     }
   }
   @HostListener("window:keyup", ["$event"])
@@ -33,7 +36,9 @@ export class WebAudioComponentComponent implements OnInit {
       this.changeOctaveOpeningAcordion();
     } else {
       const oscillator = this.findOscillator(event.keyCode);
-      this.stop(oscillator);
+      if (oscillator) {
+        this.stop(oscillator);
+      }
     }
   }
   constructor() {}
@@ -84,5 +89,27 @@ export class WebAudioComponentComponent implements OnInit {
   }
   findOscillator(key) {
     return this.oscillatorsArray.find((oscillator) => oscillator.key === key);
+  }
+  tuneOscillators(multiplicator: number) {
+    this.oscillatorsArray.forEach((oscillator) => {
+      oscillator.frequency.value = oscillator.frequency.value * multiplicator;
+      oscillator.openingSound = oscillator.closingFreq * multiplicator;
+      oscillator.closingSound = oscillator.openingFreq * multiplicator;
+    });
+  }
+
+  resetOscillatorsFrequencies() {
+    musicalObjectCorrected.forEach((note, index) => {
+      this.oscillatorsArray[index].frequency.value = note.closingFreq;
+      this.oscillatorsArray[index].openingSound = note.closingFreq;
+      this.oscillatorsArray[index].closingSound = note.openingFreq;
+    });
+  }
+
+  switchOctaves(event) {
+    this.isChecked = event.checked;
+    this.isChecked
+      ? this.tuneOscillators(0.5)
+      : this.resetOscillatorsFrequencies();
   }
 }

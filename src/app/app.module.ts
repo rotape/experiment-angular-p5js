@@ -12,13 +12,13 @@ import { MatInputModule } from "@angular/material/input";
 import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 import { AppComponent } from "./app.component";
 import { FetchPipe } from "./pipes/fetch.pipe";
 import { WebAudioComponentComponent } from "./web-audio-component/web-audio-component.component";
-const appRoutes: Routes = [
-  { path: "audioComponent", component: WebAudioComponentComponent },
-];
+const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
 
 @NgModule({
   declarations: [AppComponent, FetchPipe, WebAudioComponentComponent],
@@ -36,6 +36,9 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatCheckboxModule,
     MatFormFieldModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
