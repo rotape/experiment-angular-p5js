@@ -26,6 +26,7 @@
     "@angular/router": "^10.0.0-next.8",
     "@ng-web-apis/audio": "^1.2.3",
     "core-js": "^2.6.3",
+    "envelope-generator": "^3.0.0",
     "eslint": "^5.13.0",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",

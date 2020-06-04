@@ -3296,6 +3296,11 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.2.tgz#ac74db0bba8d33808bbf36809c3a5c3683531436"
   integrity sha512-dmD3AvJQBUjKpcNkoqr+x+IF0SdRtPz9Vk0uTy4yWqga9ibB6s4v++QFWNohjiUGoMlF552ZvNyXDxz5iW0qmw==
 
+envelope-generator@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/envelope-generator/-/envelope-generator-3.0.0.tgz#9fd1c3744e6fcf6a377de808bee95a9f4cf95328"
+  integrity sha1-n9HDdE5vz2o3fegIvulan0z5Uyg=
+
 err-code@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/err-code/-/err-code-1.1.2.tgz#06e0116d3028f6aef4806849eb0ea6a748ae6960"

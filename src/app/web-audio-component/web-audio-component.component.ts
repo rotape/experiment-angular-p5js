@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { musicalObjectCorrected } from "../common/models/sounds";
+import * as envelope from "envelope-generator";
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
@@ -13,6 +14,7 @@ export class WebAudioComponentComponent implements OnInit {
   spaceIsPressed = false;
   gainNode: GainNode;
   isChecked = false;
+  envelope: any;
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
     event.preventDefault();
@@ -41,8 +43,16 @@ export class WebAudioComponentComponent implements OnInit {
       }
     }
   }
-  constructor() {}
+  constructor() {
+    this.envelope = new envelope(this.audioContext, {
+      attackTime: 0.1,
+      decayTime: 3,
+      sustainLevel: 0.4,
+      releaseTime: 0.1,
+    });
+  }
   ngOnInit() {
+    console.log(this.envelope);
     this.createAndConnectGainNode();
     this.createAndInitializeOscillators();
   }
@@ -92,9 +102,15 @@ export class WebAudioComponentComponent implements OnInit {
   }
   tuneOscillators(multiplicator: number) {
     this.oscillatorsArray.forEach((oscillator) => {
-      oscillator.frequency.value = oscillator.frequency.value * multiplicator;
-      oscillator.openingSound = oscillator.closingFreq * multiplicator;
-      oscillator.closingSound = oscillator.openingFreq * multiplicator;
+      oscillator.frequency.value = (
+        oscillator.frequency.value * multiplicator
+      ).toFixed(3);
+      oscillator.openingSound = (
+        oscillator.closingFreq * multiplicator
+      ).toFixed(3);
+      oscillator.closingSound = (
+        oscillator.openingFreq * multiplicator
+      ).toFixed(3);
     });
   }
 
