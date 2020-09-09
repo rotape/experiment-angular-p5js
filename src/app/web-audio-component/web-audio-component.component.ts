@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { musicalObjectCorrected } from "../common/models/sounds";
 import * as envelope from "envelope-generator";
+import { of } from "rxjs";
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
@@ -15,6 +16,11 @@ export class WebAudioComponentComponent implements OnInit {
   gainNode: GainNode;
   isChecked = false;
   envelope: any;
+  attackTime = 0.1;
+  decayTime = 0.3;
+  sustainLevel = 0.4;
+  releaseTime = 0.1;
+  gainValue = (1 - 0.1) / 6;
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
     event.preventDefault();
@@ -24,7 +30,7 @@ export class WebAudioComponentComponent implements OnInit {
       this.changeOctaveClosingAcordion();
     } else {
       const oscillator = this.findOscillator(event.keyCode);
-      if (oscillator) {
+      if (oscillator && !oscillator.isPlaying) {
         this.play(oscillator);
       }
     }
@@ -37,18 +43,18 @@ export class WebAudioComponentComponent implements OnInit {
       this.spaceIsPressed = false;
       this.changeOctaveOpeningAcordion();
     } else {
-      const oscillator = this.findOscillator(event.keyCode);
-      if (oscillator) {
-        this.stop(oscillator);
+      const buttonNote = this.findOscillator(event.keyCode);
+      if (buttonNote) {
+        this.stop(buttonNote);
       }
     }
   }
   constructor() {
     this.envelope = new envelope(this.audioContext, {
       attackTime: 0.1,
-      decayTime: 3,
-      sustainLevel: 0.4,
-      releaseTime: 0.1,
+      decayTime: 0.3,
+      sustainLevel: 0.3,
+      releaseTime: 4,
     });
   }
   ngOnInit() {
@@ -58,7 +64,7 @@ export class WebAudioComponentComponent implements OnInit {
   }
   createAndConnectGainNode() {
     this.gainNode = this.audioContext.createGain();
-    this.gainNode.gain.value = (1 - 0.1) / 6;
+    // this.gainNode.gain.value = this.gainValue;
     this.gainNode.connect(this.audioContext.destination);
   }
   createAndInitializeOscillators() {
@@ -79,11 +85,36 @@ export class WebAudioComponentComponent implements OnInit {
     oscillator.isPlaying ? this.stop(oscillator) : this.play(oscillator);
   }
   play(oscillator) {
+    this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+    const attackTime = this.audioContext.currentTime + this.attackTime;
+    this.gainNode.gain.linearRampToValueAtTime(this.gainValue, attackTime);
+    this.gainNode.gain.setTargetAtTime(
+      this.gainValue,
+      this.audioContext.currentTime,
+      this.releaseTime
+    );
     oscillator.connect(this.gainNode);
+
     oscillator.isPlaying = true;
   }
   stop(oscillator) {
-    oscillator.disconnect(this.gainNode);
+    this.gainNode.gain.cancelScheduledValues(this.audioContext.currentTime);
+    // this.gainNode.gain.setValueAtTime(
+    //   this.gainValue,
+    //   this.audioContext.currentTime
+    // );
+    // this.gainNode.gain.linearRampToValueAtTime(0, this.releaseTime);
+    this.gainNode.gain.setTargetAtTime(
+      0,
+      this.audioContext.currentTime,
+      this.releaseTime
+    );
+    setTimeout(() => {
+      oscillator.disconnect(this.gainNode);
+      clearInterval();
+      console.log("OSCILLATOR", oscillator);
+    }, this.releaseTime * 1000);
+
     oscillator.isPlaying = false;
   }
   changeOctaveClosingAcordion() {
