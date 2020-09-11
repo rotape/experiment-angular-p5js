@@ -1,7 +1,5 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { musicalObjectCorrected } from "../common/models/sounds";
-import * as envelope from "envelope-generator";
-import { of } from "rxjs";
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
@@ -15,7 +13,6 @@ export class WebAudioComponentComponent implements OnInit {
   spaceIsPressed = false;
   gainNode: GainNode;
   isChecked = false;
-  envelope: any;
   attackTime = 0.1;
   decayTime = 0.3;
   sustainLevel = 0.4;
@@ -49,21 +46,12 @@ export class WebAudioComponentComponent implements OnInit {
       }
     }
   }
-  constructor() {
-    this.envelope = new envelope(this.audioContext, {
-      attackTime: 0.1,
-      decayTime: 0.3,
-      sustainLevel: 0.3,
-      releaseTime: 4,
-    });
-  }
   ngOnInit() {
     this.createAndConnectGainNode();
     this.createAndInitializeOscillators();
   }
   createAndConnectGainNode() {
     const gainNode = this.audioContext.createGain();
-    // this.gainNode.gain.value = this.gainValue;
     gainNode.connect(this.audioContext.destination);
   }
   createAndInitializeOscillators() {
