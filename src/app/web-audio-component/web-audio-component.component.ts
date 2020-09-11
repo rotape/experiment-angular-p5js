@@ -19,7 +19,7 @@ export class WebAudioComponentComponent implements OnInit {
   attackTime = 0.1;
   decayTime = 0.3;
   sustainLevel = 0.4;
-  releaseTime = 0.1;
+  releaseTime = 0.2;
   gainValue = (1 - 0.1) / 6;
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
@@ -31,7 +31,7 @@ export class WebAudioComponentComponent implements OnInit {
     } else {
       const oscillator = this.findOscillator(event.keyCode);
       if (oscillator && !oscillator.isPlaying) {
-        this.play(oscillator);
+        this.oscillatorPlay(oscillator);
       }
     }
   }
@@ -45,7 +45,7 @@ export class WebAudioComponentComponent implements OnInit {
     } else {
       const buttonNote = this.findOscillator(event.keyCode);
       if (buttonNote) {
-        this.stop(buttonNote);
+        this.oscillatorStop(buttonNote);
       }
     }
   }
@@ -58,14 +58,13 @@ export class WebAudioComponentComponent implements OnInit {
     });
   }
   ngOnInit() {
-    console.log(this.envelope);
     this.createAndConnectGainNode();
     this.createAndInitializeOscillators();
   }
   createAndConnectGainNode() {
-    this.gainNode = this.audioContext.createGain();
+    const gainNode = this.audioContext.createGain();
     // this.gainNode.gain.value = this.gainValue;
-    this.gainNode.connect(this.audioContext.destination);
+    gainNode.connect(this.audioContext.destination);
   }
   createAndInitializeOscillators() {
     musicalObjectCorrected.forEach((note) => {
@@ -79,43 +78,44 @@ export class WebAudioComponentComponent implements OnInit {
       this.oscillatorsArray.push(oscillator);
       oscillator.start();
     });
-    console.log(this.oscillatorsArray);
   }
   playOrStopOscillator(oscillator) {
-    oscillator.isPlaying ? this.stop(oscillator) : this.play(oscillator);
+    oscillator.isPlaying
+      ? this.oscillatorStop(oscillator)
+      : this.oscillatorPlay(oscillator);
   }
-  play(oscillator) {
-    this.gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+  oscillatorPlay(oscillator) {
+    const gainNode = this.audioContext.createGain();
+    gainNode.connect(this.audioContext.destination);
+    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
     const attackTime = this.audioContext.currentTime + this.attackTime;
-    this.gainNode.gain.linearRampToValueAtTime(this.gainValue, attackTime);
-    this.gainNode.gain.setTargetAtTime(
+    gainNode.gain.linearRampToValueAtTime(this.gainValue, attackTime);
+    gainNode.gain.setTargetAtTime(
       this.gainValue,
       this.audioContext.currentTime,
       this.releaseTime
     );
-    oscillator.connect(this.gainNode);
+    oscillator.connect(gainNode);
 
     oscillator.isPlaying = true;
+    oscillator.gainNode = gainNode;
   }
-  stop(oscillator) {
-    this.gainNode.gain.cancelScheduledValues(this.audioContext.currentTime);
-    // this.gainNode.gain.setValueAtTime(
-    //   this.gainValue,
-    //   this.audioContext.currentTime
-    // );
-    // this.gainNode.gain.linearRampToValueAtTime(0, this.releaseTime);
-    this.gainNode.gain.setTargetAtTime(
+  oscillatorStop(oscillator) {
+    oscillator.isPlaying = false;
+    oscillator.gainNode.gain.cancelScheduledValues(
+      this.audioContext.currentTime
+    );
+    oscillator.gainNode.gain.setTargetAtTime(
       0,
       this.audioContext.currentTime,
       this.releaseTime
     );
     setTimeout(() => {
-      oscillator.disconnect(this.gainNode);
-      clearInterval();
-      console.log("OSCILLATOR", oscillator);
-    }, this.releaseTime * 1000);
-
-    oscillator.isPlaying = false;
+      if (oscillator.gainNode.gain.value < 0.02) {
+        oscillator.disconnect(oscillator.gainNode);
+        clearInterval();
+      }
+    }, this.releaseTime * 1000 + 1000);
   }
   changeOctaveClosingAcordion() {
     this.oscillatorsArray.forEach((oscillator) => {

@@ -3,7 +3,15 @@
   align-items: center;
 
   &__box {
+    background-image: url("../../assets/images/acordioBlai.jpeg");
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: cover;
     flex-direction: column;
+    min-height: 28em;
+    max-width: 55em;
+    margin: auto;
   }
 
   &__line {
@@ -14,19 +22,22 @@
     }
 
     .key {
-      width: 3.5em;
-      height: 3.5em;
+      width: 0.7em;
+      height: 0.7em;
       border-radius: 50%;
       margin: 0 0.2em;
-      padding: 1em;
-      background-color: rgba($color: #a36758, $alpha: 1);
+      padding: 1.19em;
+      top: 4.0875em;
+      left: 0.9375em;
+      position: relative;
+      background-color: #c9c1bf71;
 
       &--shifted {
-        background-color: rgba($color: #849b5f, $alpha: 1);
+        background-color: #849b5f49;
       }
 
       &--active {
-        background-color: rgba($color: #e2a24e, $alpha: 1);
+        background-color: #e2a24ebe;
       }
     }
   }
