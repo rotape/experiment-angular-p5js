@@ -10,6 +10,9 @@
     <option value="sawtooth">Sawtooth</option>
   </select> -->
   <!-- Keyboard placeholder -->
+  <mat-slide-toggle [(ngModel)]="isChecked" (change)="startPlaying($event)"
+    >Switch to Start Playing!</mat-slide-toggle
+  >
   <div class="acordion acordion__box">
     <div class="acordion acordion__line acordion__line--moved">
       <div

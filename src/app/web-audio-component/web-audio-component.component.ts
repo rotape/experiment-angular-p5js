@@ -6,8 +6,7 @@ import { musicalObjectCorrected } from "../common/models/sounds";
   styleUrls: ["./web-audio-component.component.scss"],
 })
 export class WebAudioComponentComponent implements OnInit {
-  audioContext: AudioContext = new ((<any>window).AudioContext ||
-    (<any>window).webkitAudioContext)();
+  audioContext: AudioContext;
   oscillatorsArray = [];
   closing: boolean;
   spaceIsPressed = false;
@@ -46,10 +45,16 @@ export class WebAudioComponentComponent implements OnInit {
       }
     }
   }
-  ngOnInit() {
-    this.createAndConnectGainNode();
-    this.createAndInitializeOscillators();
+  ngOnInit() {}
+  startPlaying() {
+    this.audioContext = new ((<any>window).AudioContext ||
+      (<any>window).webkitAudioContext)();
+    if (this.audioContext) {
+      this.createAndConnectGainNode();
+      this.createAndInitializeOscillators();
+    }
   }
+
   createAndConnectGainNode() {
     const gainNode = this.audioContext.createGain();
     gainNode.connect(this.audioContext.destination);
