@@ -10,7 +10,7 @@
     <option value="sawtooth">Sawtooth</option>
   </select> -->
   <!-- Keyboard placeholder -->
-  <mat-slide-toggle [(ngModel)]="isChecked" (change)="startPlaying()"
+  <mat-slide-toggle [(ngModel)]="soundEnabled" (change)="startPlaying()"
     >Switch to Start Playing!</mat-slide-toggle
   >
   <div class="acordion acordion__box">
@@ -60,7 +60,9 @@
       </div>
     </div>
   </div>
-  <mat-slide-toggle [(ngModel)]="isChecked" (change)="switchOctaves($event)"
+  <mat-slide-toggle
+    [(ngModel)]="osctaveSwitched"
+    (change)="switchOctaves($event)"
     >Switch Octave</mat-slide-toggle
   >
 </div>
