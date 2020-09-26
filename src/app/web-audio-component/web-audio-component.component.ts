@@ -135,17 +135,15 @@ export class WebAudioComponentComponent implements OnInit {
     return this.oscillatorsArray.find((oscillator) => oscillator.key === key);
   }
   tuneOscillators(multiplicator: number) {
-    this.oscillatorsArray = this.oscillatorsArray.map((oscillator) => {
-      oscillator.frequency.value = (
-        oscillator.frequency.value * multiplicator
-      ).toFixed(3);
-      oscillator.openingSound = (
-        oscillator.closingFreq * multiplicator
-      ).toFixed(3);
-      oscillator.closingSound = (
-        oscillator.openingFreq * multiplicator
-      ).toFixed(3);
-    });
+    const multipliedFrequenciesOscillatorsArray = this.oscillatorsArray.map(
+      (oscillator) => {
+        oscillator.frequency.value = oscillator.frequency.value * multiplicator;
+        oscillator.openingSound = oscillator.openingSound * multiplicator;
+        oscillator.closingSound = oscillator.closingSound * multiplicator;
+        return oscillator;
+      }
+    );
+    this.oscillatorsArray = [...multipliedFrequenciesOscillatorsArray];
   }
 
   resetOscillatorsFrequencies() {
