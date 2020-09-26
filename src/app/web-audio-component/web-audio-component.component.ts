@@ -12,7 +12,7 @@ export class WebAudioComponentComponent implements OnInit {
   soundEnabled: boolean;
   spaceIsPressed = false;
   gainNode: GainNode;
-  attackTime = 0.1;
+  attackTime = 0.01;
   decayTime = 0.3;
   sustainLevel = 0.4;
   releaseTime = 0.2;
