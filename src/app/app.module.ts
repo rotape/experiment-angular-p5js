@@ -25,7 +25,7 @@ const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
+    RouterModule.forRoot(appRoutes, { enableTracing: true, relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
