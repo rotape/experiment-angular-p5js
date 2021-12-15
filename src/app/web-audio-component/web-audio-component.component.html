@@ -13,53 +13,16 @@
   <mat-slide-toggle [(ngModel)]="soundEnabled" (change)="startPlaying()"
     >Switch to Start Playing!</mat-slide-toggle
   >
-  <div class="acordion acordion__box">
-    <div class="acordion acordion__line acordion__line--moved">
-      <div
-        *ngFor="let oscillator of oscillatorsArray | slice: 0:11"
-        (click)="playOrStopOscillator(oscillator)"
-        [ngClass]="{
-          'key--active': oscillator.isPlaying,
-          'key--shifted': spaceIsPressed
-        }"
-        class="key"
-      >
-        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-        <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
-      </div>
-    </div>
-    <div class="acordion acordion__line">
-      <div
-        *ngFor="let oscillator of oscillatorsArray | slice: 11:23"
-        (click)="playOrStopOscillator(oscillator)"
-        [ngClass]="{
-          'key--active': oscillator.isPlaying,
-          'key--shifted': spaceIsPressed
-        }"
-        class="key"
-      >
-        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-        <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
-      </div>
-    </div>
-    <div class="acordion acordion__line acordion__line--moved">
-      <div
-        *ngFor="let oscillator of oscillatorsArray | slice: 23:34"
-        (click)="playOrStopOscillator(oscillator)"
-        [ngClass]="{
-          'key--active': oscillator.isPlaying,
-          'key--shifted': spaceIsPressed
-        }"
-        class="key"
-      >
-        <span *ngIf="spaceIsPressed">{{ oscillator.closingNote }}</span>
-        <span *ngIf="!spaceIsPressed">{{ oscillator.openingNote }}</span>
-        <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
-      </div>
-    </div>
-  </div>
+  <app-accordion
+    [Oscillators]="oscillatorsArray"
+    [SpaceIsPressed]="spaceIsPressed"
+    [SoundEnabled]="soundEnabled"
+    [AttackTime]="attackTime"
+    [DecayTime]="decayTime"
+    [SustainLevel]="sustainLevel"
+    [ReleaseTime]="releaseTime"
+    [GainValue]="gainValue"
+  ></app-accordion>
   <mat-slide-toggle [(ngModel)]="octaveSwitched" (change)="switchOctaves()"
     >Switch Octave</mat-slide-toggle
   >
