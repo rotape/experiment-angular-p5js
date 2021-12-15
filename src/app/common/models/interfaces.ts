@@ -1,5 +1,11 @@
 export interface Note {
-  noteName: String;
-  keyName: string;
-  frequency: string;
+  closingFreq: number;
+  closingFreqOctave: number;
+  closingNote: string;
+  closingOctave: number;
+  keyCode: number;
+  openingFreq: number;
+  openingFreqOctave: number;
+  openingNote: string;
+  openingOctave: number;
 }

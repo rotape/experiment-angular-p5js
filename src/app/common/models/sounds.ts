@@ -1,3 +1,5 @@
+import { Note } from "./interfaces";
+
 export let musicalObject = [
   { key: 81, octave_3: 98, octave_4: 103.83 },
   { key: 87, octave_3: 116.54, octave_4: 123.47 },
@@ -76,7 +78,7 @@ export let musicalObject2 = {
   193: { key: 193, octave_3: 4 * 130.81, octave_4: 4 * 138.59 },
 };
 
-export const musicalObjectCorrected = [
+export const musicalObjectCorrected: Note[] = [
   {
     keyCode: 87,
     closingNote: "si",

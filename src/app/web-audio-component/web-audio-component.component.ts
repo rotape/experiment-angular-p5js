@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener } from "@angular/core";
+import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
+
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
@@ -70,7 +72,7 @@ export class WebAudioComponentComponent implements OnInit {
     gainNode.connect(this.audioContext.destination);
   }
   createAndInitializeOscillators() {
-    musicalObjectCorrected.forEach((note) => {
+    musicalObjectCorrected.forEach((note: Note) => {
       const oscillator: any = this.audioContext.createOscillator();
       oscillator.frequency.value = note.closingFreq;
       oscillator.openingSound = note.closingFreq;
