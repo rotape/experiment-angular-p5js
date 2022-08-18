@@ -18,15 +18,31 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AppComponent } from "./app.component";
 import { FetchPipe } from "./pipes/fetch.pipe";
 import { WebAudioComponentComponent } from "./web-audio-component/web-audio-component.component";
-import { AccordionComponent } from './accordion/accordion.component';
+import { AccordionComponent } from "./accordion/accordion.component";
+import { ToggleButtonComponent } from "./components/toggle-button/toggle-button.component";
+import { KnobComponent } from "./components/knob/knob.component";
+import { SliderComponent } from "./components/slider/slider.component";
+import { ReversePipe } from "./pipes/reverse.pipe";
 const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
 
 @NgModule({
-  declarations: [AppComponent, FetchPipe, WebAudioComponentComponent, AccordionComponent],
+  declarations: [
+    AppComponent,
+    FetchPipe,
+    ReversePipe,
+    WebAudioComponentComponent,
+    AccordionComponent,
+    ToggleButtonComponent,
+    KnobComponent,
+    SliderComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true, relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(appRoutes, {
+      enableTracing: true,
+      relativeLinkResolution: "legacy",
+    }),
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,

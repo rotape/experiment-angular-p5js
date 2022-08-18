@@ -1,13 +1,40 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
-
+import MMLEmitter from "mml-emitter";
+import MIDIFile from "midifile";
+import MIDIPlayer from "midiplayer";
+import FMVoice from "../common/synth/voice-dx7";
+import { MIDI } from "../common/synth/midi";
+import { Synth } from "../common/synth/synth";
+import SysexDX7 from "../common/synth/sysex-dx7";
+import { Visualizer } from "../common/synth/visualizer";
+import config from "../common/synth/config";
+import defaultPresets from "../common/synth/default-presets";
+import { PresetCtrlService } from "../services/preset-ctrl.service";
+import { HttpClient } from "@angular/common/http";
+import { MidiCtrlService } from "../services/midi-ctrl.service";
 @Component({
   selector: "app-web-audio-component",
   templateUrl: "./web-audio-component.component.html",
   styleUrls: ["./web-audio-component.component.scss"],
 })
 export class WebAudioComponentComponent implements OnInit {
+  basePresets: any;
+  presets: any[];
+  selectedIndex: number;
+  presetCtrl: PresetCtrlService;
+  constructor(
+    private presetCtrlService: PresetCtrlService,
+    private midiCtrlService: MidiCtrlService,
+    private http: HttpClient
+  ) {
+    this.presetCtrl = new PresetCtrlService();
+  }
+  scriptProcessor: ScriptProcessorNode;
+  synth: Synth;
+  midi: MIDI;
+  visualizer: Visualizer;
   audioContext: AudioContext;
   oscillatorsArray = [];
   closing: boolean;
@@ -48,7 +75,101 @@ export class WebAudioComponentComponent implements OnInit {
       }
     }
   }
+
   ngOnInit() {}
+  onMidiPlay() {
+    this.midiCtrlService.onMidiPlay();
+  }
+
+  onMidiStop() {
+    this.midiCtrlService.onMidiStop();
+  }
+  reset() {
+    this.presetCtrlService.reset();
+  }
+  save() {
+    this.presetCtrlService.save();
+  }
+  onDemoClick(val?) {
+    this.midiCtrlService.onDemoClick(val);
+  }
+  onVizClick() {
+    this.midiCtrlService.onVizClick();
+  }
+  getBasePresets() {
+    this.http.get("roms/ROM1A.SYX").subscribe((data) => {
+      this.basePresets = SysexDX7.loadBank(data);
+      this.presets = [];
+      for (var i = 0; i < this.basePresets.length; i++) {
+        if (localStorage[i]) {
+          this.presets[i] = localStorage[i];
+        } else {
+          this.presets[i] = this.basePresets[i];
+        }
+      }
+      this.selectedIndex = 10; // Select E.PIANO 1
+      this.presetCtrlService.onChange();
+    });
+  }
+  onChange() {
+    throw new Error("Method not implemented.");
+  }
+  configSyntModule() {
+    this.synth = new Synth(FMVoice, config.polyphony);
+    this.midi = new MIDI(this.synth);
+    this.audioContext = new window.AudioContext();
+    this.setupAudioGraph();
+    config.sampleRate = this.audioContext.sampleRate;
+    this.visualizer = new Visualizer(
+      "analysis",
+      256,
+      35,
+      0xc0cf35,
+      0x2f3409,
+      this.audioContext
+    );
+    this.scriptProcessor = null;
+  }
+
+  setupAudioGraph() {
+    this.scriptProcessor = this.audioContext.createScriptProcessor(
+      config.bufferSize,
+      0,
+      2
+    );
+    this.scriptProcessor.connect(this.audioContext.destination);
+    this.scriptProcessor.connect(this.visualizer.getAudioNode());
+    var bufferSize = this.scriptProcessor.bufferSize || config.bufferSize;
+    var bufferSizeMs = (1000 * bufferSize) / config.sampleRate;
+    var msPerSample = 1000 / config.sampleRate;
+    // Attach to window to avoid GC. http://sriku.org/blog/2013/01/30/taming-the-scriptprocessornode
+    this.scriptProcessor.onaudioprocess = (e) => {
+      var buffer = e.outputBuffer;
+      var outputL = buffer.getChannelData(0);
+      var outputR = buffer.getChannelData(1);
+
+      var sampleTime = performance.now() - bufferSizeMs;
+      var visualizerFrequency = FMVoice.frequencyFromNoteNumber(
+        this.synth.getLatestNoteDown()
+      );
+      this.visualizer.setPeriod(config.sampleRate / visualizerFrequency);
+
+      for (var i = 0, length = buffer.length; i < length; i++) {
+        sampleTime += msPerSample;
+        if (
+          this.synth.eventQueue.length &&
+          this.synth.eventQueue[0].timeStamp < sampleTime
+        ) {
+          this.synth.processMidiEvent(this.synth.eventQueue.shift());
+        }
+
+        var output = this.synth.render();
+        outputL[i] = output[0];
+        outputR[i] = output[1];
+      }
+    };
+  }
+
   startPlaying() {
     if (this.soundEnabled) {
       console.log("sound enabled", this.soundEnabled);

@@ -26,4 +26,339 @@
   <mat-slide-toggle [(ngModel)]="octaveSwitched" (change)="switchOctaves()"
     >Switch Octave</mat-slide-toggle
   >
+  <div>DX7 Synth</div>
+  <div>
+    <div class="dx7-container">
+      <div class="dx7-top-panel">
+        <div class="dx7-logo"></div>
+        <div class="display">
+          <div class="lcd-text" ng-bind="presetCtrl.paramDisplayText"></div>
+          <div id="analysis" class="analysis" (click)="onVizClick()"></div>
+          <select
+            ng-model="presetCtrl.selectedIndex"
+            ng-change="presetCtrl.onChange($event)"
+            ng-options="presetCtrl.presets.indexOf(preset) as preset.name for preset in presetCtrl.presets"
+            class="lcd"
+          ></select>
+        </div>
+        <div class="dx7-buttons-row-1">
+          <button class="dx7-button purple" (click)="onVizClick()">Viz</button>
+          <button class="dx7-button teal" (click)="onDemoClick(0)">
+            Demo 1
+          </button>
+          <button class="dx7-button teal" (click)="onDemoClick(1)">
+            Demo 2
+          </button>
+          <button class="dx7-button pink" (click)="save()">Save</button>
+          <button class="dx7-button pink" (click)="reset()">Reset</button>
+        </div>
+        <div class="dx7-buttons-row-2">
+          MIDI Device:
+          <select class="dx7-button" id="midiIn"></select>
+        </div>
+      </div>
+      <div class="dx7-operators">
+        <div
+          class="algorithm-diagram"
+          [ngStyle]="{
+            'background-image': ''
+          }"
+        ></div>
+        <div
+          class="operator"
+          *ngFor="
+            let operator of presetCtrl.presets[presetCtrl.selectedIndex]
+              .operators | reverse
+          "
+        >
+          <div class="param-group">
+            <div ng-show="$first" class="param-group-heading heading-algorithm">
+              Algorithm
+            </div>
+            <div ng-show="$first" class="param-group-heading">Operator</div>
+            <div class="param">
+              <div class="param-label">On/Off</div>
+              <toggle-button [value]="operator.enabled"></toggle-button>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Level'"
+                [value]="operator.volume"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="-50"
+                [max]="50"
+                [label]="'Pan'"
+                [value]="operator.pan"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="7"
+                [label]="'Vel Sens'"
+                [value]="operator.velocitySens"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="-3"
+                [max]="3"
+                [label]="'LFOSens '"
+                [value]="operator.lfoAmpModSens"
+              ></knob>
+            </div>
+          </div>
+          <div class="param-group">
+            <div ng-show="$first" class="param-group-heading">Frequency</div>
+            <div class="param">
+              <div class="param-label">Fixed</div>
+              <toggle-button ng-model="operator.oscMode"></toggle-button>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                max="31"
+                ng-if="operator.oscMode == 0"
+                label="Coarse"
+                [value]="operator.freqCoarse"
+              ></knob>
+              <knob
+                [step]="1"
+                [min]="0"
+                max="3"
+                ng-if="operator.oscMode == 1"
+                label="Coarse"
+                [value]="operator.freqCoarse"
+              ></knob>
+            </div>
+            <div class="frequency-display" ng-bind="freqDisplay"></div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                max="99"
+                label="Fine"
+                [value]="operator.freqFine"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="-7"
+                max="7"
+                label="Detune"
+                [value]="operator.detune"
+              ></knob>
+            </div>
+          </div>
+          <div class="param-group param-group-sliders">
+            <div ng-show="$first" class="param-group-heading">EG Rate</div>
+            <div class="param narrow" ng-repeat="i in [0,1,2,3]">
+              <slider
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'EG R' + (i + 1)"
+                [value]="operator.rates[i]"
+              ></slider>
+            </div>
+          </div>
+          <div class="param-group param-group-sliders">
+            <div ng-show="$first" class="param-group-heading">EG Level</div>
+            <div class="param narrow" ng-repeat="i in [0,1,2,3]">
+              <slider
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'EG L' + (i + 1)"
+                [value]="operator.levels[i]"
+              ></slider>
+            </div>
+          </div>
+          <div class="param-group">
+            <div ng-show="$first" class="param-group-heading">
+              Keyboard Scaling <span style="opacity: 0.2">Not implemented</span>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Rate'"
+                [value]="operator.keyScaleRate"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Depth'"
+                [value]="operator.keyScaleDepthL"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Curve'"
+                [value]="operator.keyScaleCurveL"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Breakpt'"
+                [value]="operator.keyScaleBreakpoint"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Curve'"
+                [value]="operator.keyScaleCurveR"
+              ></knob>
+            </div>
+            <div class="param">
+              <knob
+                [step]="1"
+                [min]="0"
+                [max]="99"
+                [label]="'Depth'"
+                [value]="operator.keyScaleDepthR"
+              ></knob>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dx7-bottom-panel">
+        <div class="param wide">
+          <knob
+            [step]="1"
+            [min]="1"
+            [max]="32"
+            [label]="'Algorithm'"
+            [value]="presetCtrl.params.algorithm"
+          ></knob>
+        </div>
+        <div class="param wide">
+          <knob
+            [step]="1"
+            [min]="0"
+            [max]="7"
+            [label]="'Feedback'"
+            [value]="presetCtrl.params.feedback"
+          ></knob>
+        </div>
+        <!--
+				<div class="group-name">LFO</div>
+				-->
+        <div class="param extra-wide">
+          <div class="param-label">Waveform</div>
+          <select
+            class="dx7-button"
+            ng-model="presetCtrl.presets[presetCtrl.selectedIndex].lfoWaveform"
+            ng-change="presetCtrl.onLFOChange()"
+            ng-options="presetCtrl.lfoWaveformOptions.indexOf(wave) as wave for wave in presetCtrl.lfoWaveformOptions"
+          ></select>
+        </div>
+        <div class="param">
+          <knob
+            [step]="1"
+            [min]="0"
+            max="99"
+            label="Speed"
+            [value]="presetCtrl.params.lfoSpeed"
+          ></knob>
+        </div>
+        <div class="param">
+          <knob
+            [step]="1"
+            [min]="0"
+            max="99"
+            label="Delay"
+            [value]="presetCtrl.params.lfoDelay"
+          ></knob>
+        </div>
+        <div class="param">
+          <knob
+            [step]="1"
+            [min]="0"
+            max="99"
+            label="Amp Mod"
+            [value]="presetCtrl.params.lfoAmpModDepth"
+          ></knob>
+        </div>
+        <div class="param">
+          <knob
+            [step]="1"
+            [min]="0"
+            max="99"
+            label="Pitch Mod"
+            [value]="presetCtrl.params.lfoPitchModDepth"
+          ></knob>
+        </div>
+        <div class="param">
+          <knob
+            [step]="1"
+            [min]="0"
+            max="7"
+            label="Pitch Sens"
+            [value]="presetCtrl.params.lfoPitchModSens"
+          ></knob>
+        </div>
+        <div class="param">
+          <div class="param-label">After Touch</div>
+          <toggle-button
+            ng-true-value="1"
+            ng-false-value="0"
+            [value]="presetCtrl.params.aftertouchEnabled"
+          ></toggle-button>
+        </div>
+        <select
+          class="dx7-button"
+          ng-model="midiCtrl.midiFileIndex"
+          ng-options="midiCtrl.midiFiles.indexOf(file) as file for file in midiCtrl.midiFiles"
+        ></select>
+        <button class="dx7-button teal" (click)="onMidiPlay()">Play</button>
+        <button class="dx7-button teal" (click)="onMidiStop()">Stop</button>
+
+        <!-- TODO: Sync and Pitch EG
+				<div class="param">
+					<div class="param-label">Sync</div>
+					<label for="lfoSync">
+						<toggle-button ng-true-value="1" ng-false-value="0" ng-model="presetCtrl.params.lfoSync"></toggle-button>
+					</label>
+				</div>
+				<div class="param-group param-group-sliders">
+					<div class="param-group-heading below">Pitch EG Rate</div>
+					<div class="param narrow" ng-repeat="i in [0,1,2,3]">
+						<slider step="1" min="0" max="99"  label="Pitch R{{i+1}}" ng-model="presetCtrl.params.pitchEnvelope.rates[i]"></slider>
+					</div>
+				</div>
+				<div class="param-group param-group-sliders">
+					<div class="param-group-heading below">Pitch EG Level</div>
+					<div class="param narrow" ng-repeat="i in [0,1,2,3]">
+						<slider step="1" min="0" max="99"  label="Pitch L{{i+1}}" ng-model="presetCtrl.params.pitchEnvelope.levels[i]"></slider>
+					</div>
+				</div>
+				-->
+      </div>
+    </div>
+  </div>
 </div>
