@@ -253,7 +253,7 @@
             [min]="1"
             [max]="32"
             [label]="'Algorithm'"
-            [value]="presetCtrl.params.algorithm"
+            [value]="presetCtrl.params?.algorithm"
           ></knob>
         </div>
         <div class="param wide">
@@ -262,7 +262,7 @@
             [min]="0"
             [max]="7"
             [label]="'Feedback'"
-            [value]="presetCtrl.params.feedback"
+            [value]="presetCtrl.params?.feedback"
           ></knob>
         </div>
         <!--
@@ -283,7 +283,7 @@
             [min]="0"
             max="99"
             label="Speed"
-            [value]="presetCtrl.params.lfoSpeed"
+            [value]="presetCtrl.params?.lfoSpeed"
           ></knob>
         </div>
         <div class="param">
@@ -292,7 +292,7 @@
             [min]="0"
             max="99"
             label="Delay"
-            [value]="presetCtrl.params.lfoDelay"
+            [value]="presetCtrl.params?.lfoDelay"
           ></knob>
         </div>
         <div class="param">
@@ -301,7 +301,7 @@
             [min]="0"
             max="99"
             label="Amp Mod"
-            [value]="presetCtrl.params.lfoAmpModDepth"
+            [value]="presetCtrl.params?.lfoAmpModDepth"
           ></knob>
         </div>
         <div class="param">
@@ -310,7 +310,7 @@
             [min]="0"
             max="99"
             label="Pitch Mod"
-            [value]="presetCtrl.params.lfoPitchModDepth"
+            [value]="presetCtrl.params?.lfoPitchModDepth"
           ></knob>
         </div>
         <div class="param">
@@ -319,7 +319,7 @@
             [min]="0"
             max="7"
             label="Pitch Sens"
-            [value]="presetCtrl.params.lfoPitchModSens"
+            [value]="presetCtrl.params?.lfoPitchModSens"
           ></knob>
         </div>
         <div class="param">
@@ -327,7 +327,7 @@
           <toggle-button
             ng-true-value="1"
             ng-false-value="0"
-            [value]="presetCtrl.params.aftertouchEnabled"
+            [value]="presetCtrl.params?.aftertouchEnabled"
           ></toggle-button>
         </div>
         <select
@@ -342,19 +342,19 @@
 				<div class="param">
 					<div class="param-label">Sync</div>
 					<label for="lfoSync">
-						<toggle-button ng-true-value="1" ng-false-value="0" ng-model="presetCtrl.params.lfoSync"></toggle-button>
+						<toggle-button ng-true-value="1" ng-false-value="0" ng-model="presetCtrl.params?.lfoSync"></toggle-button>
 					</label>
 				</div>
 				<div class="param-group param-group-sliders">
 					<div class="param-group-heading below">Pitch EG Rate</div>
 					<div class="param narrow" ng-repeat="i in [0,1,2,3]">
-						<slider step="1" min="0" max="99"  label="Pitch R{{i+1}}" ng-model="presetCtrl.params.pitchEnvelope.rates[i]"></slider>
+						<slider step="1" min="0" max="99"  label="Pitch R{{i+1}}" ng-model="presetCtrl.params?.pitchEnvelope.rates[i]"></slider>
 					</div>
 				</div>
 				<div class="param-group param-group-sliders">
 					<div class="param-group-heading below">Pitch EG Level</div>
 					<div class="param narrow" ng-repeat="i in [0,1,2,3]">
-						<slider step="1" min="0" max="99"  label="Pitch L{{i+1}}" ng-model="presetCtrl.params.pitchEnvelope.levels[i]"></slider>
+						<slider step="1" min="0" max="99"  label="Pitch L{{i+1}}" ng-model="presetCtrl.params?.pitchEnvelope.levels[i]"></slider>
 					</div>
 				</div>
 				-->

@@ -27,25 +27,54 @@ export interface Params {
   lfoDelay: number;
 }
 
+export interface PresetParams {
+  name?: any;
+  feedback(feedback: any);
+  operators?: any;
+  presets?: any;
+}
+
 export interface Operator {
-  rates;
-  levels;
-  keyScaleBreakpoint;
-  keyScaleDepthL;
-  keyScaleDepthR;
-  keyScaleCurveL;
-  keyScaleCurveR;
-  keyScaleRate;
-  detune;
-  lfoAmpModSens;
-  velocitySens;
-  volume;
-  oscMode;
-  freqCoarse;
-  freqFine;
-  pan;
-  idx;
-  enabled;
+  idx?: number;
+  enabled?: true;
+  rates?: number[];
+  levels?: number[];
+  detune?: number;
+  velocitySens?: number;
+  lfoAmpModSens?: number;
+  volume?: number;
+  oscMode?: number;
+  freqCoarse?: number;
+  freqFine?: number;
+  pan?: number;
+  outputLevel?: number;
+  keyScaleBreakpoint?;
+  keyScaleDepthL?;
+  keyScaleDepthR?;
+  keyScaleCurveL?;
+  keyScaleCurveR?;
+  keyScaleRate?;
+}
+export interface PitchEnvelope {
+  rates: number[];
+  levels: number[];
+}
+export interface Preset {
+  name: string;
+  algorithm: number;
+  feedback: number;
+  lfoSpeed: number;
+  lfoDelay: number;
+  lfoPitchModDepth: number;
+  lfoAmpModDepth: number;
+  lfoPitchModSens: number;
+  lfoWaveform: number;
+  lfoSync: number;
+  pitchEnvelope: PitchEnvelope;
+  controllerModVal: number;
+  aftertouchEnabled: number;
+
+  operators: Operator[];
 }
 
 export enum LfoWaveform {

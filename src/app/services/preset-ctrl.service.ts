@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Preset, PresetParams } from "../common/models/interfaces";
 import { defaultPresets } from "../common/synth/default-presets";
 import * as SysexDX7 from "../common/synth/sysex-dx7";
 import { FMVoice } from "../common/synth/voice-dx7";
@@ -15,14 +16,14 @@ export class PresetCtrlService {
     "Sample & Hold",
   ];
   basePresets: any;
-  presets = defaultPresets;
+  presets: Preset[] = defaultPresets;
   selectedIndex = 0;
   DEFAULT_PARAM_TEXT = "--";
   paramDisplayText = this.DEFAULT_PARAM_TEXT;
 
   paramManipulating = false;
   paramDisplayTimer = null;
-  params: any;
+  params: Preset;
   constructor() {}
 
   save() {

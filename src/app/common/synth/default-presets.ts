@@ -1,4 +1,6 @@
-export var defaultPresets = [
+import { Preset } from "../models/interfaces";
+
+export let defaultPresets: Preset[] = [
   {
     name: "Init",
     algorithm: 18,
