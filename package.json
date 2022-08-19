@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^14.1.2",
     "@angular/router": "^14.1.2",
     "@ng-web-apis/audio": "^1.2.3",
+    "@types/webmidi": "^2.0.6",
     "@webaudiomodules/api": "^2.0.0-alpha.2",
     "core-js": "^2.6.3",
     "envelope-generator": "^3.0.0",

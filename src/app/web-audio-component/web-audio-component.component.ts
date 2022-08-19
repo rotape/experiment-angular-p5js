@@ -1,16 +1,15 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
-import MMLEmitter from "mml-emitter";
-import MIDIFile from "midifile";
-import MIDIPlayer from "midiplayer";
-import FMVoice from "../common/synth/voice-dx7";
+import { MMLEmitter } from "mml-emitter";
+import { MIDIFile } from "midifile";
+import { FMVoice } from "../common/synth/voice-dx7";
 import { MIDI } from "../common/synth/midi";
 import { Synth } from "../common/synth/synth";
-import SysexDX7 from "../common/synth/sysex-dx7";
+import { SysexDX7 } from "../common/synth/sysex-dx7";
 import { Visualizer } from "../common/synth/visualizer";
-import config from "../common/synth/config";
-import defaultPresets from "../common/synth/default-presets";
+import { CONFIG } from "../common/synth/config";
+import * as defaultPresets from "../common/synth/default-presets";
 import { PresetCtrlService } from "../services/preset-ctrl.service";
 import { HttpClient } from "@angular/common/http";
 import { MidiCtrlService } from "../services/midi-ctrl.service";
@@ -32,9 +31,9 @@ export class WebAudioComponentComponent implements OnInit {
     this.presetCtrl = new PresetCtrlService();
   }
   scriptProcessor: ScriptProcessorNode;
-  synth: Synth;
-  midi: MIDI;
-  visualizer: Visualizer;
+  synth;
+  midi;
+  visualizer;
   audioContext: AudioContext;
   oscillatorsArray = [];
   closing: boolean;
@@ -94,7 +93,7 @@ export class WebAudioComponentComponent implements OnInit {
     this.midiCtrlService.onDemoClick(val);
   }
   onVizClick() {
-    this.midiCtrlService.onVizClick();
+    this.visualizer.cicleMode();
   }
   getBasePresets() {
     this.http.get("roms/ROM1A.SYX").subscribe((data) => {
@@ -115,11 +114,11 @@ export class WebAudioComponentComponent implements OnInit {
     throw new Error("Method not implemented.");
   }
   configSyntModule() {
-    this.synth = new Synth(FMVoice, config.polyphony);
+    this.synth = new Synth(FMVoice, CONFIG.polyphony);
     this.midi = new MIDI(this.synth);
     this.audioContext = new window.AudioContext();
     this.setupAudioGraph();
-    config.sampleRate = this.audioContext.sampleRate;
+    CONFIG.sampleRate = this.audioContext.sampleRate;
     this.visualizer = new Visualizer(
       "analysis",
       256,
@@ -133,15 +132,15 @@ export class WebAudioComponentComponent implements OnInit {
 
   setupAudioGraph() {
     this.scriptProcessor = this.audioContext.createScriptProcessor(
-      config.bufferSize,
+      CONFIG.bufferSize,
       0,
       2
     );
     this.scriptProcessor.connect(this.audioContext.destination);
     this.scriptProcessor.connect(this.visualizer.getAudioNode());
-    var bufferSize = this.scriptProcessor.bufferSize || config.bufferSize;
-    var bufferSizeMs = (1000 * bufferSize) / config.sampleRate;
-    var msPerSample = 1000 / config.sampleRate;
+    var bufferSize = this.scriptProcessor.bufferSize || CONFIG.bufferSize;
+    var bufferSizeMs = (1000 * bufferSize) / CONFIG.sampleRate;
+    var msPerSample = 1000 / CONFIG.sampleRate;
     // Attach to window to avoid GC. http://sriku.org/blog/2013/01/30/taming-the-scriptprocessornode
     this.scriptProcessor.onaudioprocess = (e) => {
       var buffer = e.outputBuffer;
@@ -152,7 +151,7 @@ export class WebAudioComponentComponent implements OnInit {
       var visualizerFrequency = FMVoice.frequencyFromNoteNumber(
         this.synth.getLatestNoteDown()
       );
-      this.visualizer.setPeriod(config.sampleRate / visualizerFrequency);
+      this.visualizer.setPeriod(CONFIG.sampleRate / visualizerFrequency);
 
       for (var i = 0, length = buffer.length; i < length; i++) {
         sampleTime += msPerSample;

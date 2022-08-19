@@ -16,13 +16,13 @@ export class SliderComponent implements OnInit {
   sliderHandleHeight = 8;
   sliderRailHeight = 50;
   positionRange = this.sliderRailHeight - this.sliderHandleHeight;
-  @Input() value: any;
+  @HostListener("window:keydown.enter", ["$event"])
+  @Input()
+  value: any;
   @Input() step: number;
   @Input() min: number;
   @Input() max: number;
   @Input() label: string;
-
-  @HostListener('window:keydown.enter', ['$event'])
 
   constructor() {}
 

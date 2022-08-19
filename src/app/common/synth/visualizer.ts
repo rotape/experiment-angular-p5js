@@ -8,18 +8,18 @@ var MODE_COUNT = 3;
 var WAVE_PIXELS_PER_SAMPLE = 0.4;
 
 // getByteTimeDomainData polyfill for Safari
-if (
-  global.AnalyserNode &&
-  !global.AnalyserNode.prototype.getFloatTimeDomainData
-) {
-  var uint8 = new Uint8Array(2048);
-  global.AnalyserNode.prototype.getFloatTimeDomainData = function (array) {
-    this.getByteTimeDomainData(uint8);
-    for (var i = 0, imax = array.length; i < imax; i++) {
-      array[i] = (uint8[i] - 128) * 0.0078125;
-    }
-  };
-}
+// if (
+//   global.AnalyserNode &&
+//   !global.AnalyserNode.prototype.getFloatTimeDomainData
+// ) {
+//   var uint8 = new Uint8Array(2048);
+//   global.AnalyserNode.prototype.getFloatTimeDomainData = function (array) {
+//     this.getByteTimeDomainData(uint8);
+//     for (var i = 0, imax = array.length; i < imax; i++) {
+//       array[i] = (uint8[i] - 128) * 0.0078125;
+//     }
+//   };
+// }
 
 export function Visualizer(
   containerId,
@@ -131,6 +131,7 @@ Visualizer.prototype.render = function () {
   if (sampleTime !== this.lastTime) {
     graphics.clear();
     this.lastTime = sampleTime;
+    let l = this.data.length;
 
     if (this.mode === MODE_FFT) {
       data = this.data;
@@ -156,7 +157,7 @@ Visualizer.prototype.render = function () {
 
       // Normalize...
       var max = 0;
-      for (i = 0, l = data.length; i < l; i++) {
+      for (let i = 0; i < l; i++) {
         var abs = Math.abs(data[i]);
         if (abs > max) max = abs;
       }

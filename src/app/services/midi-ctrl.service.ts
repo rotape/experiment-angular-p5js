@@ -1,11 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import MIDIPlayer from "../common/synth/midi.js";
-import MMLEmitter from "mml-emitter";
+import { MMLEmitter } from "mml-emitter";
+import { MIDI } from "../common/synth/midi";
 @Injectable({
   providedIn: "root",
 })
 export class MidiCtrlService {
+  onVizClick() {
+    throw new Error("Method not implemented.");
+  }
   mml = null;
   mmlDemos = [
     "t92 l8 o4 $" +
@@ -114,7 +117,7 @@ export class MidiCtrlService {
     "midi/sowhat.mid",
     "midi/got-a-match.mid",
   ];
-  midiPlayer = new MIDIPlayer({
+  midiPlayer = new MIDI({
     output: {
       // Loopback MIDI to input handler.
       send: function (data, timestamp) {

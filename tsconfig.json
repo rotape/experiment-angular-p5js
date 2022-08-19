@@ -8,6 +8,9 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "target": "es2020",
+    "types": [
+      "webmidi"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],

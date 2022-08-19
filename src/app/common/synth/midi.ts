@@ -127,8 +127,8 @@ export const MIDI = function (synth) {
 
   //init: start up MIDI
   window.addEventListener("load", function () {
-    if (navigator.requestMIDIAccess)
-      navigator.requestMIDIAccess().then(onMidiStarted, onMIDISystemError);
+    if (navigator["requestMIDIAccess"])
+      navigator["requestMIDIAccess"]().then(onMidiStarted, onMIDISystemError);
   });
 
   // Expose midi message handler
