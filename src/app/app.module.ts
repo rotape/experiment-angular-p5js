@@ -18,15 +18,24 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AppComponent } from "./app.component";
 import { FetchPipe } from "./pipes/fetch.pipe";
 import { WebAudioComponentComponent } from "./web-audio-component/web-audio-component.component";
-import { AccordionComponent } from './accordion/accordion.component';
+import { AccordionComponent } from "./accordion/accordion.component";
+import { SynthesizerModule } from "./angular-synthesizer/synthesizer.module";
 const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
 
 @NgModule({
-  declarations: [AppComponent, FetchPipe, WebAudioComponentComponent, AccordionComponent],
+  declarations: [
+    AppComponent,
+    FetchPipe,
+    WebAudioComponentComponent,
+    AccordionComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes, { enableTracing: true, relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot(appRoutes, {
+      enableTracing: true,
+      relativeLinkResolution: "legacy",
+    }),
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
@@ -40,6 +49,7 @@ const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
     MatSlideToggleModule,
     ReactiveFormsModule,
     FormsModule,
+    SynthesizerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
