@@ -1,3 +1,4 @@
+<app-synthesizer></app-synthesizer>
 <div class="wrp">
   <!-- Waveform selector -->
   <h1>Diatonical accordion</h1>
@@ -10,11 +11,10 @@
     <option value="sawtooth">Sawtooth</option>
   </select> -->
   <!-- Keyboard placeholder -->
-  <app-synthesizer></app-synthesizer>
   <mat-slide-toggle [(ngModel)]="soundEnabled" (change)="startPlaying()"
     >Switch to Start Playing!</mat-slide-toggle
   >
-  <app-accordion
+  <!-- <app-accordion
     [Oscillators]="oscillatorsArray"
     [SpaceIsPressed]="spaceIsPressed"
     [SoundEnabled]="soundEnabled"
@@ -23,7 +23,7 @@
     [SustainLevel]="sustainLevel"
     [ReleaseTime]="releaseTime"
     [GainValue]="gainValue"
-  ></app-accordion>
+  ></app-accordion> -->
   <mat-slide-toggle [(ngModel)]="octaveSwitched" (change)="switchOctaves()"
     >Switch Octave</mat-slide-toggle
   >

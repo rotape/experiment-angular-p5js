@@ -28,7 +28,7 @@
     "@webaudiomodules/api": "^2.0.0-alpha.2",
     "core-js": "^2.6.3",
     "envelope-generator": "^3.0.0",
-    "eslint": "^5.13.0",
+    "eslint": "^8.24.0",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",
     "tslib": "^2.0.0",

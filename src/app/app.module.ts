@@ -23,12 +23,7 @@ import { SynthesizerModule } from "./angular-synthesizer/synthesizer.module";
 const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FetchPipe,
-    WebAudioComponentComponent,
-    AccordionComponent,
-  ],
+  declarations: [AppComponent, FetchPipe, WebAudioComponentComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
