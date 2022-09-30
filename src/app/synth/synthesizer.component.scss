@@ -1,0 +1,186 @@
+@import "synthesizer.layout";
+
+.synthesizer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: $color-background-main;
+  color: $color-text-main;
+
+
+  app-synthesizer-display {
+    position: relative;
+    width: 100%;
+  }
+
+  .synthesizer-options {
+    border-top: 1px solid $color-background-secondary;
+  }
+
+  .synthesizer-main {
+    position: relative;
+    flex: 1;
+
+    & > .inside {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      .synthesizer-main-section {
+
+        flex: 1;
+
+        position: relative;
+        display: flex;
+
+
+        .synthesizer-oscs {
+          display: flex;
+          flex-direction: row;
+
+
+          .synthesizer-osc {
+            border-right: 1px solid $color-background-secondary;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            app-osc-controls {
+              flex: 1;
+            }
+
+            &:last-child {
+              border-right: none;
+            }
+          }
+        }
+
+
+        .synthesizer-osc-options {
+          flex: 1;
+
+
+          .synthesizer-osc-option {
+
+          }
+        }
+      }
+
+      .synthesizer-nodes-section {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid $color-background-secondary;
+
+        .synthesizer-nodes-navigation {
+          display: flex;
+
+          button {
+            flex: 1;
+          }
+
+        }
+
+        .synthesizer-lfos, .synthesizer-sequencers {
+          flex: 1;
+
+          .synthesizer-lfo, .synthesizer-sequencer {
+            border-bottom: 1px solid $color-background-secondary;
+
+            &:last-child {
+              border-bottom: none;
+            }
+          }
+
+          & > button {
+            width: 100%;
+          }
+        }
+      }
+
+
+    }
+
+  }
+
+  .synthesizer-options {
+    width: 100%;
+
+    label, button {
+      margin-right: $padding-small;
+    }
+
+    .synthesizer-settings {
+      display: flex;
+      width: 100%;
+
+      button {
+        text-overflow: clip;
+        font-size: $font-size-large;
+        background: none;
+        margin: $padding-medium 0;
+
+        &:hover {
+          opacity: .9;
+        }
+      }
+
+      label {
+        margin-left: $padding-small;
+      }
+
+      input, mat-slider {
+        padding: $padding-small;
+        width: 100%;
+
+      }
+
+
+      .checkbox {
+        margin-top: $padding-large;
+      }
+
+      .synthesizer-player {
+        display: flex;
+
+        button {
+          min-width: $knob-size;
+        }
+
+      }
+
+      .synthesizer-time {
+        flex: 1;
+        text-align: center;
+      }
+
+      .synthesizer-settings-values {
+        display: flex;
+        width: 100%;
+        flex: 1;
+
+        label {
+          span {
+            display: inline-block;
+            width: 100%;
+          }
+        }
+      }
+
+      .synthesizer-option-buttons {
+        display: flex;
+      }
+    }
+  }
+
+  .synthesizer-keyboard {
+
+  }
+
+
+}

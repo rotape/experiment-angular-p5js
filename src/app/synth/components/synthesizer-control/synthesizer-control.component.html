@@ -1,0 +1,61 @@
+<div class="synthesizer-control {{type}}-control"
+     (mousemove)="mouseMove($event)"
+     (mouseleave)="showSlider = false"
+     [ngClass]="{'mouse-down': (mouseIsDown)}"
+     *ngIf="ready"
+>
+  <div class="synthesizer-control-title" *ngIf="title">
+    {{title}}
+  </div>
+  <div *ngIf="type === 'knob'" class="synthesizer-control-knob"
+       (mousedown)="mouseDown($event)"
+       (mouseleave)="mouseUp($event);"
+       (mouseup)="mouseUp($event)"
+       (mouseover)="mouseOver($event)"
+       (mouseout)="mouseOut($event)"
+  >
+    <canvas #canvas></canvas>
+    <div class="knob-value">
+      <div class="knob-value-input" *ngIf="showSlider">
+        <input type="number" [(ngModel)]="value" min="{{min}}" max="{{max}}" step="{{step}}"/>
+      </div>
+      <div class="knob-value-min">
+        {{outputMin || min}}
+      </div>
+      <div class="knob-value-half">
+        {{outputMiddle || middleValue}}
+      </div>
+      <div class="knob-value-max">
+        {{outputMax || max}}
+      </div>
+      <div class="synthesizer-control-slider" *ngIf="showSlider">
+        <mat-slider min="{{min}}" max="{{max}}" step="{{step}}" [(ngModel)]="value" (change)="change();"></mat-slider>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="osc && synthesizer && effectNode" class="knob-nodes" (mouseover)="showSlider = false">
+
+    <div *ngFor="let modulator of effectNode.modulators; let i = index"
+         class="knob-node knob-node-{{i+1}}"
+         [ngClass]="{hidden:(!modulator.active && !synthesizer.connectNode), active:(modulator.active)}"
+    >
+      <div class="inside" (dblclick)="effectNode.removeModulator(modulator)">
+        <div class="knob-node-source">
+          <span class="source-type" *ngIf="modulator.type">{{modulator.type}}</span>
+          <span class="source-id" *ngIf="modulator.id"> {{modulator.id}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="knob-node knob-node-add" [ngClass]="{hidden:(!synthesizer.connectNode)}">
+      <div class="inside" (click)="effectNode.addModulator(synthesizer.connectNode); synthesizer.connectNode = null">
+        <div class="knob-node-source">
+          <span class="source-type">new</span>
+          <span class="source-id">+</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

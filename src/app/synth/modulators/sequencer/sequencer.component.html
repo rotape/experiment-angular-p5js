@@ -1,0 +1,36 @@
+<div class="synthesizer-sequencer"
+     [ngClass]="{connecting:(sequencer.synthesizer.connectNode === sequencer), active:(sequencer.active)}"
+     *ngIf="sequencer.ready"
+>
+  <div class="synthesizer-sequencer-header">
+    <div class="checkbox" [ngClass]="{active:(sequencer.active)}" (click)="sequencer.toggleActive()"></div>
+    <h3 (click)="sequencer.toggleActive()">Sequencer <span *ngIf="sequencer.id">{{sequencer.id}}</span></h3>
+    <button class="synthesizer-sequencer-connect" (click)="connect()"
+            [ngClass]="{active:(sequencer.synthesizer.connectNode === sequencer)}">connect
+    </button>
+    <button class="synthesizer-sequencer-remove" (click)="sequencer.remove()">X
+    </button>
+  </div>
+  <div class="synthesizer-sequencer-waveform"
+       (mouseover)="showOptions = true;"
+       (mouseout)="showOptions = false;"
+  >
+    <app-sequencer-canvas *ngIf="sequencer.values" [values]="sequencer.values"
+                          [sequencer]="sequencer"
+                          [synthesizer]="sequencer.synthesizer"
+                          (onValue)="sequencer.sequenceValue($event.int, $event.value)"></app-sequencer-canvas>
+  </div>
+  <div class="synthesizer-sequencer-waveform-options" [ngClass]="{active:(showOptions)}">
+    <app-synthesizer-control
+      [min]="0"
+      [max]="3"
+      [step]="1"
+      [value]="(sequencer.steps - 1) / 4"
+      [outputMin]="4"
+      [outputMiddle]="8"
+      [outputMax]="16"
+      [outputValue]="sequencer.steps"
+      (onChange)="sequencer.steps = ($event + 1) * 4; sequencer.update()"
+    ></app-synthesizer-control>
+  </div>
+</div>
