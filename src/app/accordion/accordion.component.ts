@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
-
+import * as Tone from 'tone';
 @Component({
   selector: "app-accordion",
   templateUrl: "./accordion.component.html",
@@ -15,161 +15,94 @@ import { musicalObjectCorrected } from "../common/models/sounds";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionComponent implements OnInit {
-  @Input() Oscillators: any;
-  @Input() SpaceIsPressed: boolean;
-  @Input() SoundEnabled: any;
+  SpaceIsPressed: boolean;
   audioContext: AudioContext;
   octaveSwitched: boolean;
-  @Input() AttackTime = 0.01;
-  @Input() DecayTime = 0.3;
-  @Input() SustainLevel = 0.4;
-  @Input() ReleaseTime = 0.2;
-  @Input() GainValue = (1 - 0.1) / 6;
+  @Input() AttackTime;
+  @Input() DecayTime;
+  @Input() SustainLevel;
+  @Input() ReleaseTime;
+  @Input() GainValue;
+  playingNote: Note;
+
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
     event.preventDefault();
     event.stopPropagation();
     if (event.code === "Space") {
       this.SpaceIsPressed = true;
-      this.changeOctaveClosingAcordion();
+      // this.changeOctaveClosingAcordion();
+
     } else {
-      const oscillator = this.findOscillator(event.keyCode);
-      if (oscillator && !oscillator.isPlaying) {
-        this.oscillatorPlay(oscillator);
-      }
+      const note = this.findNoteFromEvent(event)
+      this.SpaceIsPressed ? this.play(note.closingFreq) : this.play(note.openingFreq)
     }
   }
+
+
+
   @HostListener("window:keyup", ["$event"])
   keydUp(event: any) {
     event.preventDefault();
     event.stopPropagation();
     if (event.code === "Space") {
       this.SpaceIsPressed = false;
-      this.changeOctaveOpeningAcordion();
-    } else {
-      const buttonNote = this.findOscillator(event.keyCode);
-      if (buttonNote) {
-        this.oscillatorStop(buttonNote);
-      }
     }
   }
-  constructor() {}
+  synth: any;
+  msdown: boolean = false;
+  noteArray: Note[] = [...musicalObjectCorrected]
 
-  ngOnInit(): void {}
+  constructor() {
+    this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
+  }
 
-  startPlaying() {
-    if (this.SoundEnabled) {
-      console.log("sound enabled", this.SoundEnabled);
-      if (!this.audioContext) {
-        this.audioContext = new ((<any>window).AudioContext ||
-          (<any>window).webkitAudioContext)();
-        this.createAndConnectGainNode();
-        this.createAndInitializeOscillators();
-      } else if (this.audioContext.state === "suspended") {
-        console.log("RESUME");
-        this.audioContext.resume();
-      }
-    } else if (this.audioContext.state === "running") {
-      console.log("sound disabled", this.SoundEnabled);
-      this.audioContext.suspend();
+  ngOnInit(): void {
+
+  }
+
+  chorus() {
+    var chorus = new Tone.Chorus(4, 2.5, 0.5);
+    this.synth = new Tone.PolySynth(Tone.MonoSynth)
+      .toDestination()
+      .connect(chorus);
+  }
+
+  reverb() {
+    var reverb = new Tone.JCReverb(0.9).connect(Tone.Destination);
+    var delay = new Tone.FeedbackDelay(0.2);
+    this.synth = new Tone.DuoSynth().chain(delay, reverb);
+  }
+
+  phaser() {
+    var phaser = new Tone.Phaser({
+      frequency: 2,
+      octaves: 2,
+      baseFrequency: 55,
+    }).toDestination();
+
+    this.synth.connect(phaser);
+  }
+
+  msover(note) {
+    if (this.msdown) {
+      this.play(note);
     }
   }
 
-  createAndConnectGainNode() {
-    const gainNode = this.audioContext.createGain();
-    gainNode.connect(this.audioContext.destination);
-  }
-  createAndInitializeOscillators() {
-    musicalObjectCorrected.forEach((note: Note) => {
-      const oscillator: any = this.audioContext.createOscillator();
-      oscillator.frequency.value = note.closingFreq;
-      oscillator.openingSound = note.closingFreq;
-      oscillator.closingSound = note.openingFreq;
-      oscillator.key = note.keyCode;
-      oscillator.openingNote = note.openingNote;
-      oscillator.closingNote = note.closingNote;
-      this.Oscillators.push(oscillator);
-      oscillator.start();
-    });
-  }
-  playOrStopOscillator(oscillator) {
-    oscillator.isPlaying
-      ? this.oscillatorStop(oscillator)
-      : this.oscillatorPlay(oscillator);
-  }
-  oscillatorPlay(oscillator) {
-    const gainNode = this.audioContext.createGain();
-    gainNode.connect(this.audioContext.destination);
-    gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
-    const attackTime = this.audioContext.currentTime + this.AttackTime;
-    gainNode.gain.linearRampToValueAtTime(this.GainValue, attackTime);
-    gainNode.gain.setTargetAtTime(
-      this.GainValue,
-      this.audioContext.currentTime,
-      this.ReleaseTime
-    );
-    if (!oscillator.isConnected) {
-      oscillator.connect(gainNode);
-      oscillator.isPlaying = true;
-    }
-    oscillator.gainNode = gainNode;
-  }
-  oscillatorStop(oscillator) {
-    oscillator.isPlaying = false;
-    if (this.audioContext) {
-      oscillator?.gainNode?.gain.cancelScheduledValues(
-        this.audioContext.currentTime
-      );
-      oscillator?.gainNode?.gain?.setTargetAtTime(
-        0,
-        this.audioContext.currentTime,
-        this.ReleaseTime
-      );
-    }
-    setTimeout(() => {
-      if (oscillator?.gainNode?.gain?.value < 0.02 && oscillator.isConnected) {
-        oscillator.disconnect(oscillator.gainNode);
-        clearInterval();
-      }
-    }, this.ReleaseTime * 1000 + 1000);
-  }
-  changeOctaveClosingAcordion() {
-    this.Oscillators.forEach((oscillator) => {
-      oscillator.frequency.value = oscillator.openingSound;
-    });
+  play(note) {
+    // this.synth.triggerAttackRelease(['C3', 'E3', 'G3'], '8n');
+    //  this.synth.triggerAttackRelease(note,"8n");
+    this.synth.triggerAttackRelease([note], '8n');
   }
 
-  changeOctaveOpeningAcordion() {
-    this.Oscillators.forEach((oscillator) => {
-      oscillator.frequency.value = oscillator.closingSound;
-    });
-  }
-  findOscillator(key) {
-    return this.Oscillators.find((oscillator) => oscillator.key === key);
-  }
-  tuneOscillators(multiplicator: number) {
-    const multipliedFrequenciesOscillatorsArray = this.Oscillators.map(
-      (oscillator) => {
-        oscillator.frequency.value = oscillator.frequency.value * multiplicator;
-        oscillator.openingSound = oscillator.openingSound * multiplicator;
-        oscillator.closingSound = oscillator.closingSound * multiplicator;
-        return oscillator;
-      }
-    );
-    this.Oscillators = [...multipliedFrequenciesOscillatorsArray];
+   findNoteFromEvent(event: any) {
+    const note = musicalObjectCorrected.find((oscillator) => event.keyCode === oscillator.keyCode);
+    this.playingNote = note;
+    return note
   }
 
-  resetOscillatorsFrequencies() {
-    musicalObjectCorrected.map((note, index) => {
-      this.Oscillators[index].frequency.value = note.closingFreq;
-      this.Oscillators[index].openingSound = note.closingFreq;
-      this.Oscillators[index].closingSound = note.openingFreq;
-    });
-  }
 
-  switchOctaves() {
-    this.octaveSwitched
-      ? this.tuneOscillators(0.5)
-      : this.resetOscillatorsFrequencies();
-  }
+
+
 }

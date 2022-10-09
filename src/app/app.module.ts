@@ -19,12 +19,13 @@ import { AppComponent } from "./app.component";
 import { FetchPipe } from "./pipes/fetch.pipe";
 import { WebAudioComponentComponent } from "./web-audio-component/web-audio-component.component";
 import { AccordionComponent } from './accordion/accordion.component';
+import { MatSliderModule } from '@angular/material/slider';
 const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
 
 @NgModule({
   declarations: [AppComponent, FetchPipe, WebAudioComponentComponent, AccordionComponent],
   imports: [
-    BrowserModule,
+  BrowserModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true, relativeLinkResolution: 'legacy' }),
     BrowserAnimationsModule,
@@ -33,6 +34,7 @@ const appRoutes: Routes = [{ path: "", component: WebAudioComponentComponent }];
     MatCardModule,
     MatListModule,
     MatMenuModule,
+    MatSliderModule,
     MatInputModule,
     MatSelectModule,
     MatCheckboxModule,

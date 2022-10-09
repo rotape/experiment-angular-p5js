@@ -1,29 +1,13 @@
 <div class="wrp">
-  <!-- Waveform selector -->
   <h1>Diatonical accordion</h1>
   <p>Press space to change the movement direction</p>
-  <!-- <label for="soundType">Select a waveform:</label>
-  <select name="soundType" id="soundType">
-    <option value="triangle" selected>Triangle</option>
-    <option value="sine">Sine</option>
-    <option value="square">Square</option>
-    <option value="sawtooth">Sawtooth</option>
-  </select> -->
-  <!-- Keyboard placeholder -->
-  <mat-slide-toggle [(ngModel)]="soundEnabled" (change)="startPlaying()"
-    >Switch to Start Playing!</mat-slide-toggle
-  >
+
+
   <app-accordion
-    [Oscillators]="oscillatorsArray"
-    [SpaceIsPressed]="spaceIsPressed"
-    [SoundEnabled]="soundEnabled"
     [AttackTime]="attackTime"
     [DecayTime]="decayTime"
     [SustainLevel]="sustainLevel"
     [ReleaseTime]="releaseTime"
     [GainValue]="gainValue"
   ></app-accordion>
-  <mat-slide-toggle [(ngModel)]="octaveSwitched" (change)="switchOctaves()"
-    >Switch Octave</mat-slide-toggle
-  >
 </div>
