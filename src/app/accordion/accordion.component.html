@@ -1,44 +1,43 @@
+<p>
+  <button (click)="chorus()">Chorus</button>
+  <button (click)="phaser()">Phaser</button>
+  <button (click)="reverb()">Reverb</button>
+</p>
 <div class="acordion acordion__box">
   <div class="acordion acordion__line acordion__line--moved">
-    <div
-      *ngFor="let oscillator of Oscillators | slice: 0:11"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
+    <div *ngFor="let oscillator of noteArray | slice: 0:11"
+      (mouseover)="SpaceIsPressed?  msover(oscillator.closingNote) : msover(oscillator.openingNote)"
+      (mousedown)="msdown=true;SpaceIsPressed? play(oscillator.closingNote) : play(oscillator.openingNote);"
+      (mouseup)="msdown=false" [ngClass]="{
+        'key--active': playingNote === oscillator,
         'key--shifted': SpaceIsPressed
-      }"
-      class="key"
-    >
+      }" class="key">
       <span *ngIf="SpaceIsPressed">{{ oscillator.closingNote }}</span>
       <span *ngIf="!SpaceIsPressed">{{ oscillator.openingNote }}</span>
       <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
     </div>
   </div>
   <div class="acordion acordion__line">
-    <div
-      *ngFor="let oscillator of Oscillators | slice: 11:23"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
+    <div *ngFor="let oscillator of noteArray | slice: 11:23"
+      (mouseover)="SpaceIsPressed?  msover(oscillator.closingNote) : msover(oscillator.openingNote)"
+      (mousedown)="msdown=true;SpaceIsPressed? play(oscillator.closingNote) : play(oscillator.openingNote);"
+      (mouseup)="msdown=false" [ngClass]="{
+        'key--active': playingNote === oscillator,
         'key--shifted': SpaceIsPressed
-      }"
-      class="key"
-    >
+      }" class="key">
       <span *ngIf="SpaceIsPressed">{{ oscillator.closingNote }}</span>
       <span *ngIf="!SpaceIsPressed">{{ oscillator.openingNote }}</span>
-      <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
+      <!-- {{ oscillator.frequency.valuer | number: "1.2-2" }} -->
     </div>
   </div>
   <div class="acordion acordion__line acordion__line--moved">
-    <div
-      *ngFor="let oscillator of Oscillators | slice: 23:34"
-      (click)="playOrStopOscillator(oscillator)"
-      [ngClass]="{
-        'key--active': oscillator.isPlaying,
+    <div *ngFor="let oscillator of noteArray | slice: 23:34"
+      (mouseover)="SpaceIsPressed?  msover(oscillator.closingNote) : msover(oscillator.openingNote)"
+      (mousedown)="msdown=true;SpaceIsPressed? play(oscillator.closingNote) : play(oscillator.openingNote);"
+      (mouseup)="msdown=false" [ngClass]="{
+        'key--active': playingNote === oscillator,
         'key--shifted': SpaceIsPressed
-      }"
-      class="key"
-    >
+      }" class="key">
       <span *ngIf="SpaceIsPressed">{{ oscillator.closingNote }}</span>
       <span *ngIf="!SpaceIsPressed">{{ oscillator.openingNote }}</span>
       <!-- {{ oscillator.frequency.value | number: "1.2-2" }} -->
