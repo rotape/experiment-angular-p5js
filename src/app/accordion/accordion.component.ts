@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
-import * as Tone from 'tone';
+import * as Tone from "tone";
 @Component({
   selector: "app-accordion",
   templateUrl: "./accordion.component.html",
@@ -18,12 +18,15 @@ export class AccordionComponent implements OnInit {
   SpaceIsPressed: boolean;
   audioContext: AudioContext;
   octaveSwitched: boolean;
+  masterVolumeMin = -75 //volume in db's
+  masterVolumeMax = 0 //volume in db's
   @Input() AttackTime;
   @Input() DecayTime;
   @Input() SustainLevel;
   @Input() ReleaseTime;
   @Input() GainValue;
   playingNote: Note;
+  masterVolume: number;
 
   @HostListener("window:keydown", ["$event"])
   keyDown(event: any) {
@@ -32,14 +35,13 @@ export class AccordionComponent implements OnInit {
     if (event.code === "Space") {
       this.SpaceIsPressed = true;
       // this.changeOctaveClosingAcordion();
-
     } else {
-      const note = this.findNoteFromEvent(event)
-      this.SpaceIsPressed ? this.play(note.closingFreq) : this.play(note.openingFreq)
+      const note = this.findNoteFromEvent(event);
+      this.SpaceIsPressed
+        ? this.play(note.closingFreq)
+        : this.play(note.openingFreq);
     }
   }
-
-
 
   @HostListener("window:keyup", ["$event"])
   keydUp(event: any) {
@@ -51,16 +53,17 @@ export class AccordionComponent implements OnInit {
   }
   synth: any;
   msdown: boolean = false;
-  noteArray: Note[] = [...musicalObjectCorrected]
+  noteArray: Note[] = [...musicalObjectCorrected];
 
   constructor() {
     this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
   }
 
-  ngOnInit(): void {
-
+  ngOnInit(): void {}
+  setMasterVolume(event) {
+    this.masterVolume = event.value
+    Tone.getDestination().volume.rampTo(event.value, 0.1);
   }
-
   chorus() {
     var chorus = new Tone.Chorus(4, 2.5, 0.5);
     this.synth = new Tone.PolySynth(Tone.MonoSynth)
@@ -93,16 +96,18 @@ export class AccordionComponent implements OnInit {
   play(note) {
     // this.synth.triggerAttackRelease(['C3', 'E3', 'G3'], '8n');
     //  this.synth.triggerAttackRelease(note,"8n");
-    this.synth.triggerAttackRelease([note], '8n');
+    this.synth.triggerAttackRelease([note], "8n");
   }
 
-   findNoteFromEvent(event: any) {
-    const note = musicalObjectCorrected.find((oscillator) => event.keyCode === oscillator.keyCode);
+  findNoteFromEvent(event: any) {
+    const note = musicalObjectCorrected.find(
+      (oscillator) => event.keyCode === oscillator.keyCode
+    );
     this.playingNote = note;
-    return note
+    return note;
   }
 
-
-
-
+  switchOscillatorType(type) {
+    this.synth.set({oscillator: {type}});
+  }
 }

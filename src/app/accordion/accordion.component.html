@@ -1,8 +1,25 @@
-<p>
-  <button (click)="chorus()">Chorus</button>
-  <button (click)="phaser()">Phaser</button>
-  <button (click)="reverb()">Reverb</button>
-</p>
+<div>
+  <p>Master Volume</p>
+  <mat-slider class="acordion__slider" aria-label="dB's" min="{{masterVolumeMin}}" max="{{masterVolumeMax}}" [(ngModel)]="masterVolume"   (input)="setMasterVolume($event)" ></mat-slider>
+</div>
+<div class="accordion__buttons">
+  <p>Effects</p>
+  <button mat-button (click)="chorus()">Chorus</button>
+  <button mat-button (click)="phaser()">Phaser</button>
+  <button mat-button (click)="reverb()">Reverb</button>
+</div>
+<div class="accordion__buttons">
+  <p>Oscillator type</p>
+  <mat-button-toggle-group name="oscillatorType" vertical="false">
+    <mat-button-toggle (click)="switchOscillatorType('sine1')">Sine
+    </mat-button-toggle>
+    <mat-button-toggle (click)="switchOscillatorType('sawtooth')">Saw
+    </mat-button-toggle>
+    <mat-button-toggle (click)="switchOscillatorType('square')">Square</mat-button-toggle>
+    <mat-button-toggle (click)="switchOscillatorType('triangle')">Triangle</mat-button-toggle>
+  </mat-button-toggle-group>
+
+</div>
 <div class="acordion acordion__box">
   <div class="acordion acordion__line acordion__line--moved">
     <div *ngFor="let oscillator of noteArray | slice: 0:11"
