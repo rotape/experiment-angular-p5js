@@ -4,10 +4,13 @@ import {
   ChangeDetectionStrategy,
   Input,
   HostListener,
+  Output,
+  EventEmitter,
 } from "@angular/core";
 import { Note } from "../common/models/interfaces";
 import { musicalObjectCorrected } from "../common/models/sounds";
 import * as Tone from 'tone';
+import { OutputHashing } from "@angular-devkit/build-angular";
 @Component({
   selector: "app-accordion",
   templateUrl: "./accordion.component.html",
@@ -18,6 +21,7 @@ export class AccordionComponent implements OnInit {
   SpaceIsPressed: boolean;
   audioContext: AudioContext;
   octaveSwitched: boolean;
+  @Input() monoSynth = new Tone.Synth({oscillator: {type: 'sine'}});
   @Input() AttackTime;
   @Input() DecayTime;
   @Input() SustainLevel;
@@ -54,7 +58,7 @@ export class AccordionComponent implements OnInit {
   noteArray: Note[] = [...musicalObjectCorrected]
 
   constructor() {
-    this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
+    this.synth = new Tone.PolySynth();
   }
 
   ngOnInit(): void {
@@ -63,6 +67,7 @@ export class AccordionComponent implements OnInit {
 
   chorus() {
     var chorus = new Tone.Chorus(4, 2.5, 0.5);
+
     this.synth = new Tone.PolySynth(Tone.MonoSynth)
       .toDestination()
       .connect(chorus);
@@ -72,6 +77,7 @@ export class AccordionComponent implements OnInit {
     var reverb = new Tone.JCReverb(0.9).connect(Tone.Destination);
     var delay = new Tone.FeedbackDelay(0.2);
     this.synth = new Tone.DuoSynth().chain(delay, reverb);
+
   }
 
   phaser() {
@@ -82,6 +88,7 @@ export class AccordionComponent implements OnInit {
     }).toDestination();
 
     this.synth.connect(phaser);
+
   }
 
   msover(note) {
@@ -100,6 +107,22 @@ export class AccordionComponent implements OnInit {
     const note = musicalObjectCorrected.find((oscillator) => event.keyCode === oscillator.keyCode);
     this.playingNote = note;
     return note
+  }
+
+  changeSine() {
+    this.synth.set({oscillator: {type: 'sine'}});
+  }
+
+  changeSquare() {
+    this.synth.set({oscillator: {type: 'square'}});
+  }
+
+  changeTri() {
+    this.synth.set({oscillator: {type: 'triangle'}});
+  }
+
+  changeSaw() {
+    this.synth.set({oscillator: {type: 'sawtooth'}});
   }
 
 

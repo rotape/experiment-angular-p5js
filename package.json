@@ -29,10 +29,10 @@
     "core-js": "^2.6.3",
     "envelope-generator": "^3.0.0",
     "eslint": "^5.13.0",
+    "lodash": "^4.17.21",
     "rxjs": "^6.4.0",
     "rxjs-compat": "^6.4.0",
     "tone": "^14.7.77",
-    "tslib": "^2.0.0",
     "yarn": "^1.22.5",
     "zone.js": "~0.11.4"
   },
@@ -53,6 +53,7 @@
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
     "ts-node": "~7.0.1",
+    "tslib": "^2.4.0",
     "tslint": "~6.1.0",
     "typescript": "4.6.4"
   }

@@ -1,0 +1,18 @@
+<!-- <button mat-button [disabled]="playBtnDisabled" (click)="recordPlay()">Play Recording</button>
+<button mat-button [disabled]="playBtnDisabled" (click)="stopPlay()">Stop playing recording</button> -->
+<!-- <div>
+  <app-sink [name]="'in'" [parent]="'pingpong'" [signal]="toneRecorder.input"></app-sink>
+  <br>
+  <app-source [name]="'out'" [signal]="toneRecorder.output"></app-source>
+</div>
+<button mat-button *ngIf="!initialized" (click)="recordStart()">Record</button>
+<button mat-button *ngIf="initialized" (click)="recordStop()">Stop</button>
+
+<audio controls></audio> -->
+<app-source [name]="'out'" [signal]="toneRecorder"></app-source>
+<app-sink [name]="'in'" [parent]="'recorder'" [signal]="toneRecorder"></app-sink>
+<!-- <app-source [name]="'in'" [signal]="toneRecorder.input"></app-source> -->
+<app-toggles [options]="kinds"
+class="recorder-kind-toggle"
+(toggle)="setKind($event)"
+[activeOption]="currentKind"></app-toggles>

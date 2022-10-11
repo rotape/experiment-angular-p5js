@@ -1,8 +1,15 @@
-<p>
-  <button (click)="chorus()">Chorus</button>
-  <button (click)="phaser()">Phaser</button>
-  <button (click)="reverb()">Reverb</button>
-</p>
+<app-source [name]="'out'" [signal]="synth"></app-source>
+<button mat-raised-button (click)="chorus()">Chorus</button>
+<button mat-raised-button (click)="phaser()">Phaser</button>
+<button mat-raised-button (click)="reverb()">Reverb</button>
+
+<mat-button-toggle-group name="oscillatorType" aria-label="Sine type">
+  <mat-button-toggle (click)="changeSine()" value="sine">Sine</mat-button-toggle>
+  <mat-button-toggle (click)="changeSquare()" value="square">Square</mat-button-toggle>
+  <mat-button-toggle (click)="changeTri()" value="triangle">Triangle</mat-button-toggle>
+  <mat-button-toggle (click)="changeSaw()" value="sawtooth">Saw tooth</mat-button-toggle>
+</mat-button-toggle-group>
+
 <div class="acordion acordion__box">
   <div class="acordion acordion__line acordion__line--moved">
     <div *ngFor="let oscillator of noteArray | slice: 0:11"
@@ -44,3 +51,4 @@
     </div>
   </div>
 </div>
+
